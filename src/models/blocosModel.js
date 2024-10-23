@@ -42,6 +42,7 @@ const blocosModel = {
       });
     });
   },
+  
 };
 
 module.exports = blocosModel;

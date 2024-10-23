@@ -43,6 +43,7 @@ const salasController = {
       res.status(500).json({ error: 'Erro ao deletar sala' });
     }
   },
+
 };
 
 module.exports = salasController;

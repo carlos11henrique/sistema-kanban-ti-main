@@ -25,6 +25,7 @@ const chamadosController = {
       res.status(201).json({ id });
     } catch (error) {
       res.status(500).json({ error: 'Erro ao criar chamado' });
+      console.log(error);
     }
   },
   update: async (req, res) => {

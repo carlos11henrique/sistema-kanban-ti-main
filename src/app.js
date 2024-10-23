@@ -24,12 +24,12 @@ app.use(cors())
 app.use('/auth',authRoutes);
 app.use('/setores',verify, setoresRoutes);
 app.use('/usuarios', verify,authorize([ROLES.NOA,ROLES.TI,ROLES.MANUTENCAO]), usuariosRoutes);
-app.use('/blocos', verify,authorize([ROLES.NOA,ROLES.TI,ROLES.MANUTENCAO]), blocosRoutes);
-app.use('/salas',verify,authorize([ROLES.NOA,ROLES.TI,ROLES.MANUTENCAO]), salasRoutes);
-app.use('/maquinas',verify,authorize([ROLES.NOA,ROLES.TI]), maquinasRoutes);
+app.use('/blocos', blocosRoutes);
+app.use('/salas',verify,authorize([ROLES.NOA,ROLES.TI,ROLES.MANUTENCAO,ROLES.DOCENTE,ROLES.ESTUDANDE]), salasRoutes);
+app.use('/maquinas',verify,authorize([ROLES.NOA,ROLES.TI,ROLES.MANUTENCAO,ROLES.DOCENTE,ROLES.ESTUDANDE]), maquinasRoutes);
 app.use('/problemas',verify, problemasRoutes);
-app.use('/chamados',verify,authorize([ROLES.NOA,ROLES.MANUTENCAO,ROLES.TI]), chamadosRoutes);
-app.use('/chamados-maquinas',verify,authorize([ROLES.NOA,ROLES.TI]), chamadosMaquinasRoutes);
+app.use('/chamados', chamadosRoutes);
+app.use('/chamados-maquinas',verify,authorize([ROLES.NOA,ROLES.TI,ROLES.MANUTENCAO,ROLES.DOCENTE,ROLES.ESTUDANDE]), chamadosMaquinasRoutes);
 app.use('/atribuidos', verify, atribuídosRoutes);
 app.use('/logs',verify, logsRoutes);
 

@@ -1,5 +1,6 @@
 // src/controllers/blocosController.js
 const blocosModel = require('../models/blocosModel');
+const salasModel = require('../models/salasModel');
 
 const blocosController = {
   getAll: async (req, res) => {
@@ -43,6 +44,19 @@ const blocosController = {
       res.status(500).json({ error: 'Erro ao deletar bloco' });
     }
   },
+  getAllWithSalas: async (req, res) => {
+    try {
+      const blocos = await blocosModel.getAll();
+      const salas = await salasModel.getAll();
+      const blocoscomSalas = blocos.map((bloco) => {
+      const salasDoBloco = salas.filter(sala => sala.bloco_id === bloco.id)
+     return { ...bloco, salas: salasDoBloco };
+      });
+      res.status(200).json(blocoscomSalas);
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao buscar blocos' });
+    }
+  }
 };
 
 module.exports = blocosController;

@@ -9,5 +9,6 @@ router.get('/:id', blocosController.getById);
 router.post('/', blocosController.create);
 router.put('/:id', blocosController.update);
 router.delete('/:id', blocosController.delete);
+router.get('/com/salas', blocosController.getAllWithSalas);
 
 module.exports = router;
