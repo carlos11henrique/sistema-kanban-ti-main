@@ -21,7 +21,16 @@ const chamadosController = {
   },
   create: async (req, res) => {
     try {
-      const id = await chamadosModel.create(req.body);
+      const chamado = { 
+        usuario_id: req.userId,
+        problema_id: req.body.problema_id,
+        bloco_id: req.body.bloco_id,
+        sala_id: req.body.sala_id,
+        descricao: req.body.descricao,
+        
+      }
+      console.log(chamado);
+      const id = await chamadosModel.create(chamado);
       res.status(201).json({ id });
     } catch (error) {
       res.status(500).json({ error: 'Erro ao criar chamado' });

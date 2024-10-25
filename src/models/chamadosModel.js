@@ -21,10 +21,10 @@ const chamadosModel = {
 
   create: (chamado) => {
     return new Promise((resolve, reject) => {
-      const { usuario_id, problema_id, bloco_id, sala_id, descricao } = chamado;
+      const { usuario_id, problema_id, bloco_id, sala_id, descricao,} = chamado;
       db.query(
-        'INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao) VALUES (?, ?, ?, ?, ?)', 
-        [usuario_id, problema_id, bloco_id, sala_id, descricao],
+        'INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao,status) VALUES (?, ?, ?, ?, ?, ?)', 
+        [usuario_id, problema_id, bloco_id, sala_id, descricao, "Análise"] ,
         (err, results) => {
           if (err) return reject(new Error('Erro ao criar o chamado.'));
           resolve(results.insertId);

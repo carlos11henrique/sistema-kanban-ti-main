@@ -195,9 +195,17 @@ INSERT IGNORE INTO maquinas (numero_maquina, sala_id) VALUES
 
 -- Insere problemas
 INSERT IGNORE INTO problemas (descricao) VALUES 
-('Problema de rede'), 
-('Máquina não liga'), 
-('Erro no sistema operacional');
+('Ar condicionado'),
+('Projetores'),
+('Caixa de Som'),
+('Iluminação do ambiente'),
+('Mobiliário'),
+('Computadores e Periféricos'),
+('Softwares e Programas Específicos'),
+('Disposição dos Equipamentos no Ambiente'),
+('Internet'),
+('outros');
+
 
 -- Insere chamados
 INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao, status) VALUES 
