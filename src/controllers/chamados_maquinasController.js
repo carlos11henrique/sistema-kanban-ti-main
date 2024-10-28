@@ -23,6 +23,7 @@ const chamadosMaquinasController = {
     try {
       const id = await chamadosMaquinasModel.create(req.body.chamado_id, req.body.maquina_id);
       res.status(201).json({ id });
+      console.log(error)
     } catch (error) {
       res.status(500).json({ error: 'Erro ao criar chamado máquina' });
     }

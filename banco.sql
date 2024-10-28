@@ -1,3 +1,4 @@
+-- Cria o banco de dados e usa-o
 CREATE DATABASE IF NOT EXISTS sistema_kanban_ti;
 USE sistema_kanban_ti;
 
@@ -34,12 +35,7 @@ CREATE TABLE IF NOT EXISTS salas (
 );
 
 -- Tabela de Máquinas
-CREATE TABLE IF NOT EXISTS maquinas (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	numero_maquina VARCHAR(50) NOT NULL,
-	sala_id INT NOT NULL,
-	FOREIGN KEY (sala_id) REFERENCES salas(id) ON DELETE CASCADE
-);
+
 
 -- Tabela de Problemas
 CREATE TABLE IF NOT EXISTS problemas (
@@ -64,15 +60,14 @@ CREATE TABLE IF NOT EXISTS chamados (
 	FOREIGN KEY (sala_id) REFERENCES salas(id) ON DELETE CASCADE
 );
 
--- Tabela de Chamados_Maquinas
-CREATE TABLE IF NOT EXISTS chamados_maquinas (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	chamado_id INT NOT NULL,
-	maquina_id INT NOT NULL,
-	FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE,
-	FOREIGN KEY (maquina_id) REFERENCES maquinas(id) ON DELETE CASCADE
-);
 
+
+CREATE TABLE IF NOT EXISTS maquinas (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	numero_maquina VARCHAR(50) NOT NULL,
+	chamado_id INT NOT NULL,
+	FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE
+);
 -- Tabela de Atribuídos
 CREATE TABLE IF NOT EXISTS atribuidos (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -151,14 +146,15 @@ INSERT INTO salas (numero_sala, bloco_id) VALUES
 ('Sala 6.1 - Térreo - Bloco E', 5),
 ('Sala 07 - Térreo - Bloco E', 5),
 ('Sala 08 - Térreo - Bloco E', 5),
-('Predial (S.9)  Térreo - Bloco E', 5),
-('Sala 10 - Térro - Bloco E', 5);
--- Insere salas ara Bloco F
-INSERT INTO sala (numero_sala, bloco_id) VALUES 
-('Sala 01 - 1° Adar - Bloco F', 6),
-('Sala 02 - 1° Adar - Bloco F', 6),
-('Sala 03 - 1° Adar - Bloco F', 6),
-('Sala 04 - 1° Adar - Bloco F', 6),
+('Predial (S.9) - Térreo - Bloco E', 5),
+('Sala 10 - Térreo - Bloco E', 5);
+
+-- Insere salas para Bloco F
+INSERT INTO salas (numero_sala, bloco_id) VALUES 
+('Sala 01 - 1° Andar - Bloco F', 6),
+('Sala 02 - 1° Andar - Bloco F', 6),
+('Sala 03 - 1° Andar - Bloco F', 6),
+('Sala 04 - 1° Andar - Bloco F', 6),
 ('Sala 05 - 1° Andar - Bloco F', 6),
 ('Sala 06 - 1° Andar - Bloco F', 6),
 ('Sala 07 - 1° Andar - Bloco F', 6),
@@ -187,10 +183,7 @@ INSERT INTO salas (numero_sala, bloco_id) VALUES
 ('Planta de processamento de cereais, raízes e derivados - Térreo', 8);
 
 -- Insere máquinas
-INSERT IGNORE INTO maquinas (numero_maquina, sala_id) VALUES 
-('PC-001', 1), 
-('PC-002', 2), 
-('PC-003', 3);
+
 
 -- Insere problemas
 INSERT IGNORE INTO problemas (descricao) VALUES 
@@ -213,16 +206,10 @@ INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao, sta
 (2, 3, 2, 3, 'Erro ao inicializar o Windows.', 'Pendentes');
 
 -- Insere chamados para máquinas
-INSERT INTO chamados_maquinas (chamado_id, maquina_id) VALUES 
-(1, 1), 
-(2, 2), 
-(3, 3);
+
 
 -- Insere atribuições de chamados
-INSERT INTO atribuidos (chamado_id, setor_id) VALUES 
-(1, 1), 
-(2, 2), 
-(3, 3);
+
 
 -- Insere logs de chamados
 INSERT INTO logs (chamado_id, usuario_id, acao) VALUES 
