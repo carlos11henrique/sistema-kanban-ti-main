@@ -9,7 +9,6 @@ const chamadosController = {
       const chamados = await chamadosModel.getAll(userFound);
       res.json(chamados);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error: 'Erro ao buscar chamados' });
     }
   },

@@ -31,16 +31,23 @@ const chamadosModel = {
       `;
 
       const query2 = `${query} 
-      WHERE p.descricao ='Computadores e Periféricos' or p.descricao = 'Softwares e Programas Específicos'`
+      WHERE p.descricao ='Computadores e Periféricos' or p.descricao = 'Softwares e Programas Específicos' or p.descricao = 'Internet'`
 
-      
+
+      const query3 = `${query}
+      WHERE p.descricao = 'Ar condicionado' or p.descricao = 'Projetores' or p.descricao = 'Caixa de Som' or p.descricao = 'Iluminação do ambiente' or p.descricao = 'Mobiliário'`
+
+      db.query(user.ocupacao === roles.MANUTENCAO ? query3 : query, (err, results) => {
+        if (err) return reject(new Error('Erro ao buscar todos os chamados.'));
+        
+        resolve(results);
+      });
 
 
 
 
       
       db.query(user.ocupacao === roles.TI ? query2 : query, (err, results) => {
-        console.log(results)
         if (err) return reject(new Error('Erro ao buscar todos os chamados.'));
         
         resolve(results);
