@@ -1,12 +1,15 @@
 // src/controllers/chamadosController.js
 const chamadosModel = require('../models/chamadosModel');
+const userModel = require('../models/usuariosModel');
 
 const chamadosController = {
   getAll: async (req, res) => {
     try {
-      const chamados = await chamadosModel.getAll();
+      const userFound = await userModel.getById(req.userId)
+      const chamados = await chamadosModel.getAll(userFound);
       res.json(chamados);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: 'Erro ao buscar chamados' });
     }
   },

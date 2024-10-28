@@ -1,8 +1,9 @@
 const db = require('../db');
-
+const userModel = require('./usuariosModel');
+const roles = require('../middleware/auth').ROLES;
 const chamadosModel = {
 
-  getAll: () => {
+  getAll: (user) => {
     return new Promise((resolve, reject) => {
       const query = `
         SELECT 
@@ -26,15 +27,22 @@ const chamadosModel = {
         JOIN 
           salas s ON c.sala_id = s.id
         JOIN 
-          problemas p ON c.problema_id = p.id;
+          problemas p ON c.problema_id = p.id
       `;
+
+      const query2 = `${query} 
+      WHERE p.descricao ='Computadores e Periféricos' or p.descricao = 'Softwares e Programas Específicos'`
+
+      
 
 
 
 
       
-      db.query(query, (err, results) => {
+      db.query(user.ocupacao === roles.TI ? query2 : query, (err, results) => {
+        console.log(results)
         if (err) return reject(new Error('Erro ao buscar todos os chamados.'));
+        
         resolve(results);
       });
     });

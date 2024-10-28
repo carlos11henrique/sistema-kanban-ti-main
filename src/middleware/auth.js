@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/usuariosModel')
 
+
 const ROLES = {
     ESTUDANDE:"ESTUDANTE",
     DOCENTE:"DOCENTE",
