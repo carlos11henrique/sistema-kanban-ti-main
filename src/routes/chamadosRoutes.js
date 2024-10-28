@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', chamadosController.getAll);
 router.get('/:id', chamadosController.getById);
+router.get('/:detalhes', chamadosController.getChamadoDetalhes);
 router.post('/', chamadosController.create);
 router.put('/:id', chamadosController.update);
 router.delete('/:id', chamadosController.delete);
