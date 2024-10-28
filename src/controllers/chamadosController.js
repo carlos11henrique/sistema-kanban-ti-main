@@ -39,8 +39,8 @@ const chamadosController = {
         bloco_id: req.body.bloco_id,
         sala_id: req.body.sala_id,
         descricao: req.body.descricao,
+        maquinas: req.body.maquinas,
       };
-      console.log(chamado);
       const id = await chamadosModel.create(chamado);
       res.status(201).json({ id });
     } catch (error) {

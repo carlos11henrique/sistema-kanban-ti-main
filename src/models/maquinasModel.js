@@ -18,17 +18,17 @@ const maquinasModel = {
       });
     });
   },
-  create: (numero_maquina, sala_id) => {
+  create: (numero_maquina) => {
     return new Promise((resolve, reject) => {
-      db.query('INSERT INTO maquinas (numero_maquina, sala_id) VALUES (?, ?)', [numero_maquina, sala_id], (err, results) => {
+      db.query('INSERT INTO maquinas (numero_maquina) VALUES (?)', [numero_maquina], (err, results) => {
         if (err) return reject(err);
         resolve(results.insertId);
       });
     });
   },
-  update: (id, numero_maquina, sala_id) => {
+  update: (id, numero_maquina) => {
     return new Promise((resolve, reject) => {
-      db.query('UPDATE maquinas SET numero_maquina = ?, sala_id = ? WHERE id = ?', [numero_maquina, sala_id, id], (err) => {
+      db.query('UPDATE maquinas SET numero_maquina = ? = ? WHERE id = ?', [numero_maquina, id], (err) => {
         if (err) return reject(err);
         resolve();
       });

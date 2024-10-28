@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS chamados (
 	bloco_id INT NOT NULL,   -- Adicionado bloco_id para referenciar o bloco
 	sala_id INT NOT NULL,    -- Adicionado sala_id para referenciar a sala
 	descricao TEXT,
+    maquina TEXT,
 	status VARCHAR(50) NOT NULL DEFAULT 'Aceitar',
 	criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,

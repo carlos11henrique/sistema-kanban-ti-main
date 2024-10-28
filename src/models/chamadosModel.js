@@ -12,6 +12,9 @@ const chamadosModel = {
           s.numero_sala AS sala,
           p.descricao AS problema,
           c.descricao AS descricao_chamado,
+          (SELECT IFNULL(JSON_ARRAYAGG(m.numero_maquina), JSON_ARRAY())
+                FROM maquinas m
+                WHERE m.chamado_id = c.id) AS maquinas,
           c.id,
           c.status
         FROM 
@@ -26,6 +29,10 @@ const chamadosModel = {
           problemas p ON c.problema_id = p.id;
       `;
 
+
+
+
+      
       db.query(query, (err, results) => {
         if (err) return reject(new Error('Erro ao buscar todos os chamados.'));
         resolve(results);
@@ -44,14 +51,37 @@ const chamadosModel = {
   },
 
   create: (chamado) => {
-    return new Promise((resolve, reject) => {
-      const { usuario_id, problema_id, bloco_id, sala_id, descricao,} = chamado;
+    return new Promise(async(resolve, reject) => {
+      const { usuario_id, problema_id, bloco_id, sala_id, descricao,maquinas} = chamado;
       db.query(
-        'INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao,status) VALUES (?, ?, ?, ?, ?, ?)', 
-        [usuario_id, problema_id, bloco_id, sala_id, descricao, "Análise"] ,
+        'INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao,status) VALUES (?, ?, ?, ?, ?,?)', 
+        [usuario_id, problema_id, bloco_id, sala_id, descricao, "Análise"], 
         (err, results) => {
           if (err) return reject(new Error('Erro ao criar o chamado.'));
-          resolve(results.insertId);
+          const id = results.insertId;
+          if (maquinas.length <= 0) {
+            return resolve(id);
+          }
+         
+          const createMaquina = (maquina,chamado_id)=> new Promise((resolve, reject) => {
+            db.query(
+              'INSERT INTO maquinas(chamado_id, numero_maquina) VALUES (?, ?)',	
+              [chamado_id, maquina],
+              (err, results) => {
+                if (err) return reject(new Error('Erro ao criar o chamado.'));
+                resolve(results.insertId);
+              })
+          })
+          maquinas.forEach(async(maquina) => {
+           try {
+            await createMaquina(maquina,id);
+           } catch (error) { 
+            reject(error);
+            
+           }
+           resolve(id);
+          })
+         
         }
       );
     });
