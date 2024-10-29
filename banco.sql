@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS salas (
 
 -- Tabela de Máquinas
 
-
 -- Tabela de Problemas
 CREATE TABLE IF NOT EXISTS problemas (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -51,7 +50,6 @@ CREATE TABLE IF NOT EXISTS chamados (
 	bloco_id INT NOT NULL,   -- Adicionado bloco_id para referenciar o bloco
 	sala_id INT NOT NULL,    -- Adicionado sala_id para referenciar a sala
 	descricao TEXT,
-    maquina TEXT,
 	status VARCHAR(50) NOT NULL DEFAULT 'Aceitar',
 	criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
@@ -59,15 +57,22 @@ CREATE TABLE IF NOT EXISTS chamados (
 	FOREIGN KEY (bloco_id) REFERENCES blocos(id) ON DELETE CASCADE,
 	FOREIGN KEY (sala_id) REFERENCES salas(id) ON DELETE CASCADE
 );
-
-
-
 CREATE TABLE IF NOT EXISTS maquinas (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	numero_maquina VARCHAR(50) NOT NULL,
-	chamado_id INT NOT NULL,
-	FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE
+    chamado_id INT NOT NULL,
+FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE
 );
+
+-- Tabela de Chamados_Maquinas
+CREATE TABLE IF NOT EXISTS chamados_maquinas (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	chamado_id INT NOT NULL,
+	maquina_id INT NOT NULL,
+	FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE,
+	FOREIGN KEY (maquina_id) REFERENCES maquinas(id) ON DELETE CASCADE
+);
+
 -- Tabela de Atribuídos
 CREATE TABLE IF NOT EXISTS atribuidos (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -205,11 +210,13 @@ INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao, sta
 (1, 2, 1, 2, 'Computador não liga.', 'Em Andamento'),
 (2, 3, 2, 3, 'Erro ao inicializar o Windows.', 'Pendentes');
 
--- Insere chamados para máquinas
 
 
 -- Insere atribuições de chamados
-
+INSERT INTO atribuidos (chamado_id, setor_id) VALUES 
+(1, 1), 
+(2, 2), 
+(3, 3);
 
 -- Insere logs de chamados
 INSERT INTO logs (chamado_id, usuario_id, acao) VALUES 
