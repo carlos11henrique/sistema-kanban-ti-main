@@ -41,6 +41,7 @@ const chamadosController = {
         bloco_id: req.body.bloco_id,
         sala_id: req.body.sala_id,
         descricao: req.body.descricao,
+        setor : req.body.setor,
         maquinas: req.body.maquinas,
       };
       const id = await chamadosModel.create(chamado);
