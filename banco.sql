@@ -34,12 +34,10 @@ CREATE TABLE IF NOT EXISTS salas (
 	FOREIGN KEY (bloco_id) REFERENCES blocos(id) ON DELETE CASCADE
 );
 
--- Tabela de Máquinas
-
 -- Tabela de Problemas
 CREATE TABLE IF NOT EXISTS problemas (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	descricao VARCHAR(255) NOT NULL
+	descricao VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- Tabela de Chamados
@@ -47,21 +45,25 @@ CREATE TABLE IF NOT EXISTS chamados (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	usuario_id INT NOT NULL,
 	problema_id INT NOT NULL,
-	bloco_id INT NOT NULL,   -- Adicionado bloco_id para referenciar o bloco
-	sala_id INT NOT NULL,    -- Adicionado sala_id para referenciar a sala
+	bloco_id INT NOT NULL,
+	sala_id INT NOT NULL,
+	setor_id INT NOT NULL,
 	descricao TEXT,
-	status VARCHAR(50) NOT NULL DEFAULT 'Aceitar',
+	status VARCHAR(50) NOT NULL DEFAULT 'Aberto',
 	criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
 	FOREIGN KEY (problema_id) REFERENCES problemas(id) ON DELETE CASCADE,
 	FOREIGN KEY (bloco_id) REFERENCES blocos(id) ON DELETE CASCADE,
-	FOREIGN KEY (sala_id) REFERENCES salas(id) ON DELETE CASCADE
+	FOREIGN KEY (sala_id) REFERENCES salas(id) ON DELETE CASCADE,
+	FOREIGN KEY (setor_id) REFERENCES setores(id) ON DELETE CASCADE
 );
+
+-- Tabela de Máquinas
 CREATE TABLE IF NOT EXISTS maquinas (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	numero_maquina VARCHAR(50) NOT NULL,
-    chamado_id INT NOT NULL,
-FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE
+	chamado_id INT NOT NULL,
+	FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE
 );
 
 -- Tabela de Chamados_Maquinas
@@ -96,9 +98,12 @@ CREATE TABLE IF NOT EXISTS logs (
 	FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
-INSERT INTO usuarios (nome_completo, senha, email, ocupacao) VALUES
-('Maria Souza', 'senha123', 'maria.souza@example.com', 'TI'),
-('Carlos Pereira', 'senha456', 'carlos.pereira@example.com', 'NOA');
+-- Inserções iniciais
+
+-- Insere usuários
+INSERT INTO usuarios (nome_completo, senha, email, instituicao, ocupacao) VALUES
+('Maria Souza', 'senha123', 'maria.souza@example.com', 'SENAI', 'TI'),
+('Carlos Pereira', 'senha456', 'carlos.pereira@example.com', 'SENAI', 'NOA');
 
 -- Insere setores
 INSERT IGNORE INTO setores (nome_setor) VALUES ('Administrativo'), ('CAA'), ('Manutenção');
@@ -135,47 +140,47 @@ INSERT INTO salas (numero_sala, bloco_id) VALUES
 -- Insere salas para Bloco D
 INSERT INTO salas (numero_sala, bloco_id) VALUES 
 ('Laboratório - Térreo', 4),
-('Sala 01 - Térreo - Bloco D', 4),
+('Sala 01 - Térreo', 4),
 ('Lab Maker - Térreo', 4);
 
 -- Insere salas para Bloco E
 INSERT INTO salas (numero_sala, bloco_id) VALUES 
-('Sala 01 - Térreo - Bloco E', 5),
-('Sala 1.1 - Térreo - Bloco E', 5),
-('Sala 1.2 - Térreo - Bloco E', 5),
-('Sala 02 - Térreo - Bloco E', 5),
-('Sala 03 - Térreo - Bloco E', 5),
-('Sala 04 - Térreo - Bloco E', 5),
-('Sala 05 - Térreo - Bloco E', 5),
-('Sala 06 - Térreo - Bloco E', 5),
-('Sala 6.1 - Térreo - Bloco E', 5),
-('Sala 07 - Térreo - Bloco E', 5),
-('Sala 08 - Térreo - Bloco E', 5),
-('Predial (S.9) - Térreo - Bloco E', 5),
-('Sala 10 - Térreo - Bloco E', 5);
+('Sala 01 - Térreo', 5),
+('Sala 1.1 - Térreo', 5),
+('Sala 1.2 - Térreo', 5),
+('Sala 02 - Térreo', 5),
+('Sala 03 - Térreo', 5),
+('Sala 04 - Térreo', 5),
+('Sala 05 - Térreo', 5),
+('Sala 06 - Térreo', 5),
+('Sala 6.1 - Térreo', 5),
+('Sala 07 - Térreo', 5),
+('Sala 08 - Térreo', 5),
+('Predial (S.9) - Térreo', 5),
+('Sala 10 - Térreo', 5);
 
 -- Insere salas para Bloco F
 INSERT INTO salas (numero_sala, bloco_id) VALUES 
-('Sala 01 - 1° Andar - Bloco F', 6),
-('Sala 02 - 1° Andar - Bloco F', 6),
-('Sala 03 - 1° Andar - Bloco F', 6),
-('Sala 04 - 1° Andar - Bloco F', 6),
-('Sala 05 - 1° Andar - Bloco F', 6),
-('Sala 06 - 1° Andar - Bloco F', 6),
-('Sala 07 - 1° Andar - Bloco F', 6),
-('Sala 08 - 1° Andar - Bloco F', 6),
-('Sala 09 - 1° Andar - Bloco F', 6),
-('Sala 10 - 1° Andar - Bloco F', 6),
-('Sala 11 - 2° Andar - Bloco F', 6),
-('Sala 12 - 2° Andar - Bloco F', 6),
-('Sala 13 - 2° Andar - Bloco F', 6),
-('Sala 14 - 2° Andar - Bloco F', 6),
-('Sala 15 - 2° Andar - Bloco F', 6),
-('Sala 16 - 2° Andar - Bloco F', 6),
-('Sala 17 - 2° Andar - Bloco F', 6),
-('Sala 18 - 2° Andar - Bloco F', 6),
-('Sala 19 - 2° Andar - Bloco F', 6),
-('Sala 20 - 2° Andar - Bloco F', 6);
+('Sala 01 - 1° Andar', 6),
+('Sala 02 - 1° Andar', 6),
+('Sala 03 - 1° Andar', 6),
+('Sala 04 - 1° Andar', 6),
+('Sala 05 - 1° Andar', 6),
+('Sala 06 - 1° Andar', 6),
+('Sala 07 - 1° Andar', 6),
+('Sala 08 - 1° Andar', 6),
+('Sala 09 - 1° Andar', 6),
+('Sala 10 - 1° Andar', 6),
+('Sala 11 - 2° Andar', 6),
+('Sala 12 - 2° Andar', 6),
+('Sala 13 - 2° Andar', 6),
+('Sala 14 - 2° Andar', 6),
+('Sala 15 - 2° Andar', 6),
+('Sala 16 - 2° Andar', 6),
+('Sala 17 - 2° Andar', 6),
+('Sala 18 - 2° Andar', 6),
+('Sala 19 - 2° Andar', 6),
+('Sala 20 - 2° Andar', 6);
 
 -- Insere salas para Bloco G
 INSERT INTO salas (numero_sala, bloco_id) VALUES 
@@ -186,9 +191,6 @@ INSERT INTO salas (numero_sala, bloco_id) VALUES
 ('Setor teórica de Empilhadeira - Térreo', 8),
 ('Sala de Planta EMI - Térreo', 8),
 ('Planta de processamento de cereais, raízes e derivados - Térreo', 8);
-
--- Insere máquinas
-
 
 -- Insere problemas
 INSERT IGNORE INTO problemas (descricao) VALUES 
@@ -201,16 +203,15 @@ INSERT IGNORE INTO problemas (descricao) VALUES
 ('Softwares e Programas Específicos'),
 ('Disposição dos Equipamentos no Ambiente'),
 ('Internet'),
-('outros');
-
+('Outros');
 
 -- Insere chamados
-INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao, status) VALUES 
-(1, 1, 1, 1, 'Problema de rede no computador.', 'Aberto'), 
-(1, 2, 1, 2, 'Computador não liga.', 'Em Andamento'),
-(2, 3, 2, 3, 'Erro ao inicializar o Windows.', 'Pendentes');
+INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, setor_id, descricao, status) VALUES 
+(1, 1, 1, 1, 1, 'Problema de rede no computador.', 'Aberto'), 
+(1, 2, 1, 2, 1, 'Computador não liga.', 'Em Andamento'),
+(2, 3, 2, 3, 2, 'Erro ao inicializar o Windows.', 'Pendente');
 
-
+-- Insere atribuições de
 
 -- Insere atribuições de chamados
 INSERT INTO atribuidos (chamado_id, setor_id) VALUES 
@@ -223,3 +224,7 @@ INSERT INTO logs (chamado_id, usuario_id, acao) VALUES
 (1, 1, 'Chamado aberto'), 
 (2, 1, 'Chamado em andamento'), 
 (3, 2, 'Chamado pendente');
+
+
+
+
