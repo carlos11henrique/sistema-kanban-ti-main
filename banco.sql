@@ -106,7 +106,7 @@ INSERT INTO usuarios (nome_completo, senha, email, instituicao, ocupacao) VALUES
 ('Carlos Pereira', 'senha456', 'carlos.pereira@example.com', 'SENAI', 'NOA');
 
 -- Insere setores
-INSERT IGNORE INTO setores (nome_setor) VALUES ('Administrativo'), ('CAA'), ('Manutenção');
+INSERT IGNORE INTO setores (nome_setor) VALUES ('ADMINISTRACAO'), ('TI'), ('MANUTENCAO');
 
 -- Insere blocos
 INSERT INTO blocos (nome_bloco) VALUES 
