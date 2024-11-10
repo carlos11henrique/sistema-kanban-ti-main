@@ -110,10 +110,10 @@ JOIN
 
   update: (id, chamado) => {
     return new Promise((resolve, reject) => {
-      const { id, status } = chamado;
+      const { id, status,setor } = chamado;
       db.query(
-        'UPDATE chamados SET  status = ? WHERE id = ?',
-        [status, id],
+        'UPDATE chamados  SET setor = ?,  status = ? WHERE id = ? ',
+        [setor,status, id ],
         (err) => {
           if (err) return reject(new Error('Erro ao atualizar o chamado.'));
           resolve();
