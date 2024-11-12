@@ -36,14 +36,9 @@ JOIN
 
       `;
 
-      const query2 = `${query} 
-      WHERE st. = 'TI'`
+      
 
-
-      const query3 = `${query}
-      WHERE st. = 'MANUTENCAO'`
-
-      db.query(user.ocupacao === roles.MANUTENCAO ? query3 : query, (err, results) => {
+      db.query( query, (err, results) => {
         if (err) return reject(new Error('Erro ao buscar todos os chamados.'));
 
         resolve(results);
