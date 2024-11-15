@@ -1,14 +1,26 @@
 // src/controllers/chamadosController.js
 const chamadosModel = require('../models/chamadosModel');
 const userModel = require('../models/usuariosModel');
+const { ROLES } = require('../middleware/auth')
+
 
 const chamadosController = {
   getAll: async (req, res) => {
     try {
       const userFound = await userModel.getById(req.userId)
-      const chamados = await chamadosModel.getAll(userFound);
-      res.json(chamados);
+      const chamados = await chamadosModel.getAll();
+
+      const options = {
+        [ROLES.MANUTENCAO]: (c) => c.filter(c => c.setor === ROLES.MANUTENCAO),
+        [ROLES.TI]: (c) => c.filter(c => c.setor === ROLES.TI),
+        [ROLES.NOA]: (c) => c
+      }
+      
+      const action = options[userFound.ocupacao]
+
+      res.json(action(chamados))
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: 'Erro ao buscar chamados' });
     }
   },
@@ -41,7 +53,7 @@ const chamadosController = {
         bloco_id: req.body.bloco_id,
         sala_id: req.body.sala_id,
         descricao: req.body.descricao,
-        setor : req.body.setor,
+        setor: req.body.setor,
         maquinas: req.body.maquinas,
       };
       const id = await chamadosModel.create(chamado);
@@ -54,11 +66,11 @@ const chamadosController = {
 
   update: async (req, res) => {
     try {
-      await chamadosModel.update(req.params.id, req.body );
+      await chamadosModel.update(req.params.id, req.body);
       res.sendStatus(204);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: 'Erro ao atualizar chamado' });
-      console.log(req.params, req.body);
     }
   },
 

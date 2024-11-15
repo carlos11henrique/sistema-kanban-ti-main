@@ -3,13 +3,14 @@ const userModel = require('./usuariosModel');
 const roles = require('../middleware/auth').ROLES;
 const chamadosModel = {
 
-  getAll: (user) => {
+  getAll: () => {
     return new Promise((resolve, reject) => {
       const query = `
      SELECT 
     u.email AS email,
     u.ocupacao AS ocupacao,
     st.nome_setor AS setor, -- Alias para setores
+    st.id as setor_id,
     b.nome_bloco AS bloco,
     s.numero_sala AS sala,
     p.descricao AS problema,
@@ -36,27 +37,15 @@ JOIN
 
       `;
 
-      
-
-      db.query( query, (err, results) => {
-        if (err) return reject(new Error('Erro ao buscar todos os chamados.'));
-
-        resolve(results);
-      });
 
 
-
-
-
-      db.query(user.ocupacao === roles.TI ? query2 : query, (err, results) => {
+      db.query(query, (err, results) => {
         if (err) return reject(new Error('Erro ao buscar todos os chamados.'));
 
         resolve(results);
       });
     });
   },
-
-
   getById: (id) => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM chamados WHERE id = ?', [id], (err, results) => {
@@ -71,7 +60,7 @@ JOIN
       const { usuario_id, problema_id, bloco_id, sala_id, descricao, maquinas } = chamado;
       db.query(
         'INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao,status,setor_id) VALUES (?, ?, ?, ?, ?,?,?)',
-        [usuario_id, problema_id, bloco_id, sala_id, descricao, "Análise","1",],
+        [usuario_id, problema_id, bloco_id, sala_id, descricao, "Análise", "1",],
         (err, results) => {
           if (err) return reject(new Error('Erro ao criar o chamado.'));
           const id = results.insertId;
@@ -105,10 +94,10 @@ JOIN
 
   update: (id, chamado) => {
     return new Promise((resolve, reject) => {
-      const { id, status,setor } = chamado;
+      const { id, status, setor_id } = chamado;
       db.query(
-        'UPDATE chamados  SET setor = ?,  status = ? WHERE id = ? ',
-        [setor,status, id ],
+        'UPDATE chamados  SET setor_id = ?, status = ? WHERE id = ? ',
+        [setor_id, status, id],
         (err) => {
           if (err) return reject(new Error('Erro ao atualizar o chamado.'));
           resolve();
