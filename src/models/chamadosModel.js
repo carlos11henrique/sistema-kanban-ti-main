@@ -6,20 +6,17 @@ const chamadosModel = {
   getAll: () => {
     return new Promise((resolve, reject) => {
       const query = `
-     SELECT 
+    
+SELECT 
     u.email AS email,
     u.ocupacao AS ocupacao,
-    st.nome_setor AS setor, -- Alias para setores
-    st.id as setor_id,
+    st.nome_setor AS setor, 
+    st.id AS setor_id,
     b.nome_bloco AS bloco,
     s.numero_sala AS sala,
     p.descricao AS problema,
     c.descricao AS descricao_chamado,
-    (
-        SELECT IFNULL(JSON_ARRAYAGG(m.numero_maquina), JSON_ARRAY())
-        FROM maquinas m
-        WHERE m.chamado_id = c.id
-    ) AS maquinas,
+    m.numero_maquina AS maquina,  -- Agora, é uma relação direta com a máquina associada ao chamado
     c.id,
     c.status
 FROM 
@@ -27,13 +24,15 @@ FROM
 JOIN 
     usuarios u ON c.usuario_id = u.id
 JOIN 
-    setores st ON c.setor_id = st.id -- Relacionamento direto com a tabela setores
+    setores st ON c.setor_id = st.id
 JOIN 
     blocos b ON c.bloco_id = b.id
 JOIN 
     salas s ON c.sala_id = s.id
 JOIN 
-    problemas p ON c.problema_id = p.id;
+    problemas p ON c.problema_id = p.id
+JOIN 
+    maquinas m ON c.maquina_id = m.id;  -- Relaciona diretamente a máquina com o chamado
 
       `;
 
