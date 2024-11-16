@@ -5,15 +5,16 @@ const maquinasModel = {
   getAll: () => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT 
-          maquinas.id, 
-          maquinas.numero_maquina, 
-          maquinas.tipo_equipamento, 
-          maquinas.descricao, 
-          maquinas.sala_id, 
-          salas.numero_sala
-        FROM maquinas
-        LEFT JOIN salas ON maquinas.sala_id = salas.id;
+       SELECT 
+    maquinas.id, 
+    maquinas.numero_maquina, 
+    maquinas.tipo_equipamento, 
+    maquinas.descricao, 
+    maquinas.sala_id, 
+    salas.numero_sala
+FROM maquinas
+LEFT JOIN salas ON maquinas.sala_id = salas.id;
+
       `;
       db.query(query, (err, results) => {
         if (err) return reject(err);
