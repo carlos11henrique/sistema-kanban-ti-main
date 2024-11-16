@@ -39,10 +39,8 @@ const maquinasController = {
         return res.status(400).json({ error: 'ID da sala inválido' });
       }
   
-      // Chama o método create do modelo para inserir no banco de dados
       const id = await maquinasModel.create(numero_maquina, tipo_equipamento, descricao, sala_id);
       
-      // Retorna o ID da nova máquina criada
       res.status(201).json({ id });
     } catch (error) {
       console.error("Erro ao criar máquina:", error);
@@ -50,7 +48,6 @@ const maquinasController = {
     }
   },
 
-  // Atualizar máquina
   update: async (req, res) => {
     try {
       const { numero_maquina, tipo_equipamento, descricao, sala_id } = req.body;
@@ -69,7 +66,6 @@ const maquinasController = {
         return res.status(404).json({ error: 'Máquina não encontrada' });
       }
 
-      // Atualizar os dados da máquina
       await maquinasModel.update(req.params.id, { numero_maquina, tipo_equipamento, descricao, sala_id });
       res.sendStatus(204);
     } catch (error) {
@@ -78,16 +74,13 @@ const maquinasController = {
     }
   },
 
-  // Deletar máquina
   delete: async (req, res) => {
     try {
-      // Verificar se a máquina existe antes de tentar deletar
       const maquinaExistente = await maquinasModel.getById(req.params.id);
       if (!maquinaExistente) {
         return res.status(404).json({ error: 'Máquina não encontrada' });
       }
 
-      // Deletar a máquina
       await maquinasModel.delete(req.params.id);
       res.sendStatus(204);
     } catch (error) {

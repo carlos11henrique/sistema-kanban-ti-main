@@ -54,8 +54,9 @@ const chamadosController = {
         sala_id: req.body.sala_id,
         descricao: req.body.descricao,
         setor: req.body.setor,
-        maquinas: req.body.maquinas,
+        maquina_id: req.body.maquina_id,  
       };
+  
       const id = await chamadosModel.create(chamado);
       res.status(201).json({ id });
     } catch (error) {
@@ -63,6 +64,7 @@ const chamadosController = {
       console.log(error);
     }
   },
+
 
   update: async (req, res) => {
     try {

@@ -1,12 +1,11 @@
 const db = require('../db');
 const userModel = require('./usuariosModel');
 const roles = require('../middleware/auth').ROLES;
-const chamadosModel = {
 
+const chamadosModel = {
   getAll: () => {
     return new Promise((resolve, reject) => {
       const query = `
-    
 SELECT 
     u.email AS email,
     u.ocupacao AS ocupacao,
@@ -16,7 +15,7 @@ SELECT
     s.numero_sala AS sala,
     p.descricao AS problema,
     c.descricao AS descricao_chamado,
-    m.numero_maquina AS maquina,  -- Agora, é uma relação direta com a máquina associada ao chamado
+    m.numero_maquina AS maquina,  
     c.id,
     c.status
 FROM 
@@ -32,19 +31,16 @@ JOIN
 JOIN 
     problemas p ON c.problema_id = p.id
 JOIN 
-    maquinas m ON c.maquina_id = m.id;  -- Relaciona diretamente a máquina com o chamado
-
+    maquinas m ON c.maquina_id = m.id;
       `;
-
-
 
       db.query(query, (err, results) => {
         if (err) return reject(new Error('Erro ao buscar todos os chamados.'));
-
         resolve(results);
       });
     });
   },
+
   getById: (id) => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM chamados WHERE id = ?', [id], (err, results) => {
@@ -53,49 +49,55 @@ JOIN
       });
     });
   },
-
+  
   create: (chamado) => {
-    return new Promise(async (resolve, reject) => {
-      const { usuario_id, problema_id, bloco_id, sala_id, descricao, maquinas } = chamado;
-      db.query(
-        'INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao,status,setor_id) VALUES (?, ?, ?, ?, ?,?,?)',
-        [usuario_id, problema_id, bloco_id, sala_id, descricao, "Análise", "1",],
-        (err, results) => {
-          if (err) return reject(new Error('Erro ao criar o chamado.'));
-          const id = results.insertId;
-          if (maquinas.length <= 0) {
-            return resolve(id);
-          }
-
-          const createMaquina = (maquina, chamado_id) => new Promise((resolve, reject) => {
-            db.query(
-              'INSERT INTO maquinas(chamado_id, numero_maquina) VALUES (?, ?)',
-              [chamado_id, maquina],
-              (err, results) => {
-                if (err) return reject(new Error('Erro ao criar o chamado.'));
-                resolve(results.insertId);
-              })
-          })
-          maquinas.forEach(async (maquina) => {
-            try {
-              await createMaquina(maquina, id);
-            } catch (error) {
-              reject(error);
-
-            }
-            resolve(id);
-          })
-
+    return new Promise((resolve, reject) => {
+      let { usuario_id, problema_id, bloco_id, sala_id, descricao, maquina_id, setor_id } = chamado;
+  
+      if (!usuario_id || !problema_id || !bloco_id || !sala_id || !maquina_id) {
+        return reject(new Error("Campos obrigatórios não foram fornecidos."));
+      }
+  
+      // Valor padrão para setor_id, caso não fornecido
+      if (!setor_id) {
+        console.warn('setor_id não fornecido. Usando valor padrão 1.');
+        setor_id = 1; // Valor padrão
+      }
+  
+      const queryMaquina = 'SELECT id FROM maquinas WHERE numero_maquina = ?';
+      db.query(queryMaquina, [maquina_id], (err, results) => {
+        if (err) {
+          console.error('Erro ao buscar a máquina:', err);
+          return reject(new Error('Erro ao buscar a máquina.'));
         }
-      );
+  
+        // Verifica se a máquina existe
+        if (results.length === 0) {
+          return reject(new Error('Máquina não encontrada.'));
+        }
+  
+        const maquinaId = results[0].id; 
+        const query = `
+          INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, descricao, status, setor_id, maquina_id) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+    
+        db.query(query, [usuario_id, problema_id, bloco_id, sala_id, descricao || '', 'Análise', setor_id, maquinaId], (err, results) => {
+          if (err) {
+            console.error('Erro ao criar o chamado:', err);
+            return reject(new Error('Erro ao criar o chamado.'));
+          }
+          const id = results.insertId;
+          resolve(id);
+        });
+      });
     });
   },
-
   update: (id, chamado) => {
     return new Promise((resolve, reject) => {
-      const { id, status, setor_id } = chamado;
+      const { status, setor_id } = chamado;
       db.query(
-        'UPDATE chamados  SET setor_id = ?, status = ? WHERE id = ? ',
+        'UPDATE chamados SET setor_id = ?, status = ? WHERE id = ?',
         [setor_id, status, id],
         (err) => {
           if (err) return reject(new Error('Erro ao atualizar o chamado.'));

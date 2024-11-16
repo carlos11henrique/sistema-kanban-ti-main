@@ -1,4 +1,3 @@
-// src/controllers/chamados_maquinasController.js
 const chamadosMaquinasModel = require('../models/chamados_maquinasModel');
 
 const chamadosMaquinasController = {
