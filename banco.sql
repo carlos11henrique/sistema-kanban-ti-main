@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS maquinas (
     FOREIGN KEY (sala_id) REFERENCES salas(id) ON DELETE CASCADE
 );
 
+-- Tabela de Periféricos
 CREATE TABLE IF NOT EXISTS perifericos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo_periferico VARCHAR(50) NOT NULL,  -- Tipo do periférico (Ex: Teclado, Mouse, Impressora)
@@ -77,7 +78,6 @@ CREATE TABLE IF NOT EXISTS chamados (
     FOREIGN KEY (setor_id) REFERENCES setores(id) ON DELETE CASCADE
 );
 
--- Tabela de Atribuídos
 CREATE TABLE IF NOT EXISTS atribuidos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     chamado_id INT NOT NULL,
@@ -95,12 +95,13 @@ CREATE TABLE IF NOT EXISTS logs (
     acao VARCHAR(255) NOT NULL,
     data_log TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_atualizacao TIMESTAMP NULL,
-    data_exclusao TIMESTAMP NULL,
+    data_exclusao TIMESTAMP NULL,  
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- Insere setores
+
 INSERT IGNORE INTO setores (nome_setor) VALUES ('Administrativo'), ('TI'), ('Manutenção');
 
 -- Insere blocos
@@ -217,3 +218,12 @@ INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, setor_id, maqu
 VALUES 
 (1, 1, 1, 1, 1, 1, 'Problema no ar condicionado', 'Aberto'),
 (2, 2, 2, 2, 2, 2, 'Problema com o projetor', 'Em Andamento');
+
+
+
+
+
+
+
+
+
