@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS chamados (
     FOREIGN KEY (setor_id) REFERENCES setores(id) ON DELETE CASCADE
 );
 
+-- Tabela de Atribuídos
 CREATE TABLE IF NOT EXISTS atribuidos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     chamado_id INT NOT NULL,
@@ -95,12 +96,10 @@ CREATE TABLE IF NOT EXISTS logs (
     acao VARCHAR(255) NOT NULL,
     data_log TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_atualizacao TIMESTAMP NULL,
-    data_exclusao TIMESTAMP NULL,  
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    data_exclusao TIMESTAMP NULL,  -- Permite a exclusão (NULL até que o chamado seja fechado/excluído)
     FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
-
 
 INSERT IGNORE INTO setores (nome_setor) VALUES ('Administrativo'), ('TI'), ('Manutenção');
 
