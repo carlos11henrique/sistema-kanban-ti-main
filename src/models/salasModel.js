@@ -4,12 +4,21 @@ const db = require('../db');
 const salasModel = {
   getAll: () => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM salas', (err, results) => {
-        if (err) return reject(err);
-        resolve(results);
-      });
+      const query = `
+      SELECT 
+        salas.id, 
+        salas.numero_sala, 
+        salas.bloco_id, 
+        blocos.nome_bloco
+      FROM salas
+      INNER JOIN blocos ON salas.bloco_id = blocos.id;
+    `;
+    db.query(query, (err, results) => {
+      if (err) return reject(new Error('Erro ao salas'));
+      resolve(results);
     });
-  },
+  });
+},
   getById: (id) => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM salas WHERE id = ?', [id], (err, results) => {
