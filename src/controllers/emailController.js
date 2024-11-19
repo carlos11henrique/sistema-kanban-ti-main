@@ -1,5 +1,6 @@
 const enviarEmail = require('./emailService');
 
+
 // Função ao criar um chamado
 const criarChamado = async (req, res) => {
   try {
@@ -35,7 +36,7 @@ const concluirChamado = async (req, res) => {
 
     console.log('Iniciando conclusão de chamado...');
     // Simulação: Atualização do chamado no banco de dados
-    const chamado = { id: chamado_id, status: 'Concluído', usuario_id: 1 }; // Mock de exemplo
+    const chamado = { id: chamado_id, status: 'Concluido', usuario_id: 1 }; // Mock de exemplo
 
     // Novo destinatário para o teste
     const usuario = { email: 'carlos.h.lima6@ba.estudante.senai.br' }; // Alterado para o teste
