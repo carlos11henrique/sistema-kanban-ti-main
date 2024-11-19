@@ -125,7 +125,7 @@ END; //
 DELIMITER ;
 
 
-INSERT IGNORE INTO setores (nome_setor) VALUES ('Administrativo'), ('TI'), ('Manutenção');
+INSERT IGNORE INTO setores (nome_setor) VALUES ('NOA'), ('TI'), ('MANUTENCAO');
 
 -- Insere blocos
 INSERT INTO blocos (nome_bloco) VALUES
