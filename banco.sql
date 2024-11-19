@@ -86,20 +86,43 @@ CREATE TABLE IF NOT EXISTS atribuidos (
     FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE,
     FOREIGN KEY (setor_id) REFERENCES setores(id) ON DELETE CASCADE
 );
-
--- Tabela de Logs
 CREATE TABLE IF NOT EXISTS logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     chamado_id INT NOT NULL,
     usuario_id INT NOT NULL,
     acao VARCHAR(255) NOT NULL,
     data_log TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_atualizacao TIMESTAMP NULL,
-    data_exclusao TIMESTAMP NULL,  
+    data_atualizacao TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    data_exclusao TIMESTAMP NULL DEFAULT NULL,  
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     FOREIGN KEY (chamado_id) REFERENCES chamados(id) ON DELETE CASCADE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+DELIMITER //
+
+CREATE TRIGGER after_chamados_insert
+AFTER INSERT ON chamados
+FOR EACH ROW
+BEGIN
+    INSERT INTO logs (chamado_id, usuario_id, acao)
+    VALUES (NEW.id, NEW.usuario_id, 'Chamado criado');
+END; //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+
+CREATE TRIGGER after_chamados_update
+AFTER UPDATE ON chamados
+FOR EACH ROW
+BEGIN
+    INSERT INTO logs (chamado_id, usuario_id, acao)
+    VALUES (NEW.id, NEW.usuario_id, CONCAT('Chamado atualizado: Status mudou para ', NEW.status));
+END; //
+
+DELIMITER ;
 
 
 INSERT IGNORE INTO setores (nome_setor) VALUES ('Administrativo'), ('TI'), ('Manutenção');

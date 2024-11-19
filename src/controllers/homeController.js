@@ -14,14 +14,34 @@ const getTotalChamados = (status, res) => {
 
 // Função para buscar o tempo médio de resolução
 const getTempoMedioResolucao = (req, res) => {
-  const query = `SELECT AVG(TIMESTAMPDIFF(SECOND, criado_em, data_exclusao)) / 60 AS tempo_medio_resolucao
-                 FROM logs WHERE data_exclusao IS NOT NULL`;
+  const query = `
+  SELECT 
+    ROUND(AVG(TIMESTAMPDIFF(SECOND, andamento.data_log, concluido.data_log)) / 60, 3) AS tempo_medio_resolucao_minutos
+  FROM 
+    logs andamento
+  JOIN 
+    logs concluido 
+    ON andamento.chamado_id = concluido.chamado_id
+  WHERE 
+    andamento.acao = 'Chamado atualizado: Status mudou para Em Andamento'
+    AND concluido.acao = 'Chamado atualizado: Status mudou para Concluido'
+    AND andamento.data_log < concluido.data_log;
+  `;
+  
   modelHome.executeQuery(query, [], (err, result) => {
     if (err) {
       console.error('Erro ao buscar tempo médio de resolução:', err);
       return res.status(500).json({ error: 'Erro ao buscar tempo médio de resolução' });
     }
-    res.json(result[0]);
+    if (result.length > 0) {
+      res.json({
+        tempo_medio_resolucao_minutos: result[0].tempo_medio_resolucao_minutos
+      });
+    } else {
+      res.json({
+        tempo_medio_resolucao_minutos: 0
+      });
+    }
   });
 };
 
@@ -29,7 +49,7 @@ const getTempoMedioResolucao = (req, res) => {
 const getProblemasRecorrentes = (req, res) => {
   const query = `SELECT p.descricao AS nome_problema, COUNT(*) AS total 
                  FROM chamados c JOIN problemas p ON c.problema_id = p.id 
-                 GROUP BY p.descricao ORDER BY total DESC LIMIT 5`;
+                 GROUP BY p.descricao ORDER BY total DESC LIMIT 3`;
   modelHome.executeQuery(query, [], (err, result) => {
     if (err) {
       console.error('Erro ao buscar problemas recorrentes:', err);
