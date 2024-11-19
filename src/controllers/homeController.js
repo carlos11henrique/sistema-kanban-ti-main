@@ -5,7 +5,7 @@ const getTotalChamados = (status, res) => {
   const query = `SELECT COUNT(*) AS total FROM chamados WHERE status = ?`;
   modelHome.executeQuery(query, [status], (err, result) => {
     if (err) {
-      console.error('Erro ao buscar total de chamados:', err);
+      console.error(`Erro ao buscar total de chamados (${status}):`, err);
       return res.status(500).json({ error: 'Erro ao buscar total de chamados' });
     }
     res.json(result[0]);

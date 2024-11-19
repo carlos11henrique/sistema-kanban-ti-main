@@ -5,7 +5,7 @@ const homeController = require('../controllers/homeController'); // Caminho corr
 const router = express.Router();
 
 // Rotas para Home
-router.get('/total-pendentes', (req, res) => homeController.getTotalChamados('pendente', res));
+router.get('/total-pendentes', (req, res) => homeController.getTotalChamados('pendentes', res));
 router.get('/total-andamento', (req, res) => homeController.getTotalChamados('em andamento', res));
 router.get('/total-concluidos', (req, res) => homeController.getTotalChamados('concluido', res));
 router.get('/tempo-medio-resolucao', homeController.getTempoMedioResolucao);
