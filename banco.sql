@@ -236,12 +236,6 @@ VALUES
 ('PC002', 'Computador', 'Desktop HP', 2), 
 ('PC003', 'Computador', 'Laptop Lenovo', 3);
 
--- Inserir dados em chamados
-INSERT INTO chamados (usuario_id, problema_id, bloco_id, sala_id, setor_id, maquina_id, descricao, status) 
-VALUES 
-(1, 1, 1, 1, 1, 1, 'Problema no ar condicionado', 'Aberto'),
-(2, 2, 2, 2, 2, 2, 'Problema com o projetor', 'Em Andamento');
-
 
 
 
