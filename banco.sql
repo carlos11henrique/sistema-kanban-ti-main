@@ -180,15 +180,15 @@ INSERT INTO salas (numero_sala, bloco_id) VALUES
 
 -- Insere salas para Bloco F
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('Sala 01 - 1° Andar', 6),
-('Sala 02 - 1° Andar', 6),
-('Sala 03 - 1° Andar', 6),
-('Sala 04 - 1° Andar', 6),
-('Sala 05 - 1° Andar', 6),
-('Sala 06 - 1° Andar', 6),
-('Sala 07 - 1° Andar', 6),
-('Sala 08 - 1° Andar', 6),
-('Sala 09 - 1° Andar', 6),
+('Laboratório 01 - 1° Andar', 6),
+('Laboratório 02 - 1° Andar', 6),
+('Laboratório 03 - 1° Andar', 6),
+('Laboratório 04 - 1° Andar', 6),
+('Laboratório 05 - 1° Andar', 6),
+('Laboratório 06 - 1° Andar', 6),
+('Laboratório 07 - 1° Andar', 6),
+('Laboratório 08 - 1° Andar', 6),
+('Laboratório 09 - 1° Andar', 6),
 ('Sala 10 - 1° Andar', 6),
 ('Sala 11 - 2° Andar', 6),
 ('Sala 12 - 2° Andar', 6),
@@ -232,9 +232,9 @@ INSERT INTO usuarios (nome_completo, senha, email, instituicao, ocupacao) VALUES
 
 INSERT INTO maquinas (numero_maquina, tipo_equipamento, descricao, sala_id) 
 VALUES 
-('PC001', 'Computador', 'Desktop Dell', 1), 
-('PC002', 'Computador', 'Desktop HP', 2), 
-('PC003', 'Computador', 'Laptop Lenovo', 3);
+('PC001', 'Computador', 'Desktop LG', 1), 
+('PC002', 'Computador', 'Desktop LG', 2), 
+('PC003', 'Computador', 'Desktop LG', 3);
 
 
 
