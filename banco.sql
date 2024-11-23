@@ -68,6 +68,8 @@ CREATE TABLE IF NOT EXISTS chamados (
     setor_id INT NOT NULL,
     maquina_id INT NOT NULL,
     descricao TEXT,
+    feedback TEXT,
+
     status VARCHAR(50) NOT NULL DEFAULT 'Aberto',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
