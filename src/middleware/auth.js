@@ -7,7 +7,9 @@ const ROLES = {
     DOCENTE:"DOCENTE",
     NOA:"NOA",
     MANUTENCAO:"MANUTENCAO",
-    TI:"TI"
+    TI:"TI",
+    ESTAGIARIO:"ESTAGIARIO", // nem gente é kkkkkkk
+    FUNCIONARIOS:"FUNCIONARIOS"
 }
 
 
