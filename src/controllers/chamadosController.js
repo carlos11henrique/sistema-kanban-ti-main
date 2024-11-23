@@ -45,6 +45,20 @@ const chamadosController = {
     }
   },
 
+  updateFeedback: async (req, res) => {
+    const { feedback } = req.body; // Feedback enviado no corpo da requisição
+    const chamadoId = req.params.id; // ID do chamado que será atualizado
+
+    try {
+      await chamadosModel.updateFeedback(chamadoId, feedback);
+
+      // Resposta de sucesso
+      res.sendStatus(204); 
+    } catch (error) {
+      console.error('Erro ao atualizar feedback do chamado:', error);
+      res.status(500).json({ error: 'Erro ao atualizar feedback do chamado.' });
+    }
+  },
   create: async (req, res) => {
     try {
       const chamado = {

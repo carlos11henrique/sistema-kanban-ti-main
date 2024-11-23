@@ -14,6 +14,7 @@ SELECT
     b.nome_bloco AS bloco,
     s.numero_sala AS sala,
     p.descricao AS problema,
+    c.feedback AS feedback,
     c.descricao AS descricao_chamado,
     m.numero_maquina AS maquina,  
     c.id,
@@ -93,6 +94,23 @@ JOIN
       });
     });
   },
+  updateFeedback: (id, feedback) => {
+    return new Promise((resolve, reject) => {
+      if (!feedback) {
+        return reject(new Error('Feedback não pode ser vazio.'));
+      }
+
+      const query = 'UPDATE chamados SET feedback = ? WHERE id = ?';
+
+      db.query(query, [feedback, id], (err) => {
+        if (err) {
+          console.error('Erro ao atualizar o feedback:', err);
+          return reject(new Error('Erro ao atualizar o feedback.'));
+        }
+        resolve();
+      });
+    });
+  },
   update: (id, chamado) => {
     return new Promise((resolve, reject) => {
       const { status, setor_id } = chamado;
@@ -106,8 +124,7 @@ JOIN
       );
     });
   },
-
-  delete: (id) => {
+    delete: (id) => {
     return new Promise((resolve, reject) => {
       db.query('DELETE FROM chamados WHERE id = ?', [id], (err) => {
         if (err) return reject(new Error('Erro ao deletar o chamado.'));

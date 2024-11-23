@@ -34,7 +34,9 @@ app.use('/chamados', verify, authorize([ROLES.NOA, ROLES.TI, ROLES.MANUTENCAO, R
 app.use('/chamados-maquinas', verify, authorize([ROLES.NOA, ROLES.TI, ROLES.MANUTENCAO, ROLES.DOCENTE, ROLES.ESTUDANDE]), chamadosMaquinasRoutes);
 app.use('/atribuidos', verify, atribuídosRoutes);
 app.use('/logs', verify, logsRoutes);
-app.use('/home', homeRoutes); // Corrigido o caminho e o middleware
+app.use('/home', homeRoutes); 
+
+// Corrigido o caminho e o middleware
 
 // Função para criar usuário se não existir
 const createUserIfNotExists = async () => {
