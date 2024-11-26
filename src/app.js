@@ -54,11 +54,9 @@ const createUserIfNotExists = async () => {
     // Verifica se o usuário já existe
     const existingUser = await usuariosModel.findByEmail(email);
     if (!existingUser) {
-      // Hasheando a senha antes de salvar
       const hashedPass = await bcrypt.hash(usuario.senha, 10);
-      usuario.senha = hashedPass; // Atualiza a senha com o hash
+      usuario.senha = hashedPass; 
 
-      // Cria o usuário e retorna o ID
       const userId = await usuariosModel.create(usuario);
       console.log(`Usuário criado com ID: ${userId}`);
     } else {

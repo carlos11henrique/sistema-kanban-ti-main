@@ -47,8 +47,8 @@ const authController = {
             }
 
 
-           const token =  jwt.sign({userId:user.id,ocupacao:user.ocupacao},process.env.JWT_KEY)
-           res.status(200).json({token,userId:user.id,ocupacao:user.ocupacao})
+           const token =  jwt.sign({userId:user.id,ocupacao:user.ocupacao,email:user.email,name:user.nome_completo},process.env.JWT_KEY)
+           res.status(200).json({token,userId:user.id,ocupacao:user.ocupacao,email:user.email,name:user.nome_completo})
         } catch (error) {
             console.log(error)
             res.status(500).json({message:"Erro ao realizar login"})   
