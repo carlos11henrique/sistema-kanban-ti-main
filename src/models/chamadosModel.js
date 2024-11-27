@@ -8,6 +8,7 @@ const chamadosModel = {
       const query = `
 SELECT 
     u.email AS email,
+    u.id AS id_usuario,
     u.ocupacao AS ocupacao,
     st.nome_setor AS setor, 
     st.id AS setor_id,

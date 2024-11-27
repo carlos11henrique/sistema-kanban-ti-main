@@ -13,7 +13,9 @@ const chamadosController = {
       const options = {
         [ROLES.MANUTENCAO]: (c) => c.filter(c => c.setor === ROLES.MANUTENCAO),
         [ROLES.TI]: (c) => c.filter(c => c.setor === ROLES.TI),
-        [ROLES.NOA]: (c) => c
+        [ROLES.NOA]: (c) => c,
+        [ROLES.ESTUDANDE]: (c) => c.filter(c => c.id_usuario === req.userId),
+
       }
       
       const action = options[userFound.ocupacao]
