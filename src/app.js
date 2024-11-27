@@ -25,7 +25,7 @@ app.use(cors());
 // Definindo as rotas com seus respectivos middlewares
 app.use('/auth', authRoutes);
 app.use('/setores', verify, setoresRoutes);
-app.use('/usuarios', verify, authorize([ROLES.NOA, ROLES.TI, ROLES.MANUTENCAO]), usuariosRoutes);
+app.use('/usuarios',usuariosRoutes);
 app.use('/blocos', verify, authorize([ROLES.NOA, ROLES.TI, ROLES.MANUTENCAO, ROLES.DOCENTE, ROLES.ESTUDANDE]), blocosRoutes);
 app.use('/salas', verify, authorize([ROLES.NOA, ROLES.TI, ROLES.MANUTENCAO, ROLES.DOCENTE, ROLES.ESTUDANDE]), salasRoutes);
 app.use('/maquinas', verify, authorize([ROLES.NOA, ROLES.TI, ROLES.MANUTENCAO, ROLES.DOCENTE, ROLES.ESTUDANDE]), maquinasRoutes);
