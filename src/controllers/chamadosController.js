@@ -18,7 +18,7 @@ const chamadosController = {
         [ROLES.DOCENTE]: (c) => c.filter(c => c.id_usuario === req.userId),
         [ROLES.FUNCIONARIOS]: (c) => c.filter(c => c.id_usuario === req.userId),
         [ROLES.ESTAGIARIO]: (c) => c.filter(c => c.id_usuario === req.userId),
-        
+        [ROLES.TERCEIROS]: (c) => c.filter(c => c.id_usuario === req.userId),
 
 
       }

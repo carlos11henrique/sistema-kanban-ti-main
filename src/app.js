@@ -36,7 +36,6 @@ app.use('/atribuidos', verify, atribuídosRoutes);
 app.use('/logs', verify, logsRoutes);
 app.use('/home', homeRoutes); 
 
-// Corrigido o caminho e o middleware
 
 // Função para criar usuário se não existir
 const createUserIfNotExists = async () => {
