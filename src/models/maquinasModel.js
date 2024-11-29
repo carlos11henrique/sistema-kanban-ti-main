@@ -64,12 +64,16 @@ LEFT JOIN salas ON maquinas.sala_id = salas.id;
         SET numero_maquina = ?, tipo_equipamento = ?, descricao = ?, sala_id = ?
         WHERE id = ?
       `;
-      db.query(query, [numero_maquina, tipo_equipamento, descricao, sala_id, id], (err) => {
+      db.query(query, [numero_maquina, tipo_equipamento, descricao, sala_id, id], (err, result) => {
         if (err) return reject(err);
-        resolve();
+        if (result.affectedRows === 0) {
+          return reject('Nenhuma máquina encontrada com o ID fornecido.');
+        }
+        resolve('Máquina atualizada com sucesso!');
       });
     });
   },
+  
 
   delete: (id) => {
     return new Promise((resolve, reject) => {
