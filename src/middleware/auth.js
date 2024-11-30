@@ -10,7 +10,7 @@ const ROLES = {
     TI:"TI",
     ESTAGIARIO:"ESTAGIARIO", //  nem gente é
     FUNCIONARIOS:"FUNCIONARIOS",
-    TERCEIROS:"TERCEIROS"
+    TERCEIROS:"TERCEIRO"
 
 
 }
