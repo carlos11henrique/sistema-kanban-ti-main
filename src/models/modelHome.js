@@ -1,9 +1,8 @@
-// src/models/homeModel.js
-const db = require('../db');  // Importando a conexão do arquivo db.js
+const db = require('../db');  
 
 // Função para executar a consulta
 const executeQuery = (query, params, callback) => {
-  db.query(query, params, callback);  // Usando db.query ao invés de connection.query
+  db.query(query, params, callback); 
 };
 
 module.exports = {
