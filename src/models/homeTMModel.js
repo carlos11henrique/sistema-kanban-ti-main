@@ -1,9 +1,15 @@
+// src/models/homeTMModel.js
+
 const db = require('../db');
 
-const executeQuery = (query, params, callback) => {
-    db.execute(query, params)
-        .then(([rows]) => callback(null, rows))
-        .catch((error) => callback(error, null));
+const executeQuery = async (query, params, callback) => {
+    try {
+        const [rows] = await db.execute(query, params);
+        callback(null, rows);
+    } catch (error) {
+        console.error('Erro ao executar a query:', error);
+        callback(error, null);
+    }
 };
 
 module.exports = {

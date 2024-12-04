@@ -1,6 +1,8 @@
-const modelHome = require('../models/modelHome');
+// src/controllers/homeTMController.js
 
-// Tempo médio de resolução dos problemas por setor
+const modelHome = require('../models/homeTMModel');
+
+// Retorna o tempo médio de resolução dos problemas por setor
 const getTempoMedioResolucao = (req, res) => {
     const query = `
         SELECT 
@@ -25,11 +27,11 @@ const getTempoMedioResolucao = (req, res) => {
             console.error('Erro ao buscar tempo médio de resolução:', err);
             return res.status(500).json({ error: 'Erro ao buscar tempo médio de resolução' });
         }
-        res.json(result);
+        return res.json(result);
     });
 };
 
-// Problemas com maior índice de chamados por setor
+// Retorna os problemas com maior número de chamados por setor
 const getProblemasMaiorIndice = (req, res) => {
     const query = `
         SELECT 
@@ -53,11 +55,11 @@ const getProblemasMaiorIndice = (req, res) => {
             console.error('Erro ao buscar problemas com maior índice de chamados:', err);
             return res.status(500).json({ error: 'Erro ao buscar problemas com maior índice de chamados' });
         }
-        res.json(result);
+        return res.json(result);
     });
 };
 
-// Tempo de resolução dos chamados (abertura até o primeiro contato) por setor
+// Retorna o tempo para o primeiro contato nos chamados por setor
 const getTempoPrimeiroContato = (req, res) => {
     const query = `
         SELECT 
@@ -80,11 +82,11 @@ const getTempoPrimeiroContato = (req, res) => {
             console.error('Erro ao buscar tempo de primeiro contato:', err);
             return res.status(500).json({ error: 'Erro ao buscar tempo de primeiro contato' });
         }
-        res.json(result);
+        return res.json(result);
     });
 };
 
-// Tempo de espera para fechamento de chamados por setor
+// Retorna o tempo total para fechamento dos chamados por setor
 const getTempoFechamento = (req, res) => {
     const query = `
         SELECT 
@@ -109,7 +111,7 @@ const getTempoFechamento = (req, res) => {
             console.error('Erro ao buscar tempo de fechamento:', err);
             return res.status(500).json({ error: 'Erro ao buscar tempo de fechamento' });
         }
-        res.json(result);
+        return res.json(result);
     });
 };
 
