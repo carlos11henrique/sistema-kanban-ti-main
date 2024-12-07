@@ -1,5 +1,3 @@
-// src/controllers/homeTMController.js
-
 const modelHome = require('../models/homeTMModel');
 
 // Retorna o tempo médio de resolução dos problemas por setor
@@ -16,7 +14,7 @@ const getTempoMedioResolucao = (req, res) => {
         JOIN 
             problemas p ON c.problema_id = p.id
         JOIN 
-            logs l ON l.chamado_id = c.id AND l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
+            logs l ON l.chamado_id = c.id AND l.acao = 'Chamado atualizado: Status mudou para Concluído'
         GROUP BY 
             s.nome_setor, p.descricao
         ORDER BY 
@@ -26,6 +24,9 @@ const getTempoMedioResolucao = (req, res) => {
         if (err) {
             console.error('Erro ao buscar tempo médio de resolução:', err);
             return res.status(500).json({ error: 'Erro ao buscar tempo médio de resolução' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Nenhum dado encontrado.' });
         }
         return res.json(result);
     });
@@ -55,6 +56,9 @@ const getProblemasMaiorIndice = (req, res) => {
             console.error('Erro ao buscar problemas com maior índice de chamados:', err);
             return res.status(500).json({ error: 'Erro ao buscar problemas com maior índice de chamados' });
         }
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Nenhum dado encontrado.' });
+        }
         return res.json(result);
     });
 };
@@ -74,6 +78,8 @@ const getTempoPrimeiroContato = (req, res) => {
             logs l ON l.chamado_id = c.id AND l.acao LIKE 'Chamado atualizado%'
         GROUP BY 
             s.nome_setor, c.id
+        HAVING 
+            tempo_primeiro_contato_horas IS NOT NULL
         ORDER BY 
             setor, tempo_primeiro_contato_horas ASC;
     `;
@@ -81,6 +87,9 @@ const getTempoPrimeiroContato = (req, res) => {
         if (err) {
             console.error('Erro ao buscar tempo de primeiro contato:', err);
             return res.status(500).json({ error: 'Erro ao buscar tempo de primeiro contato' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Nenhum dado encontrado.' });
         }
         return res.json(result);
     });
@@ -100,9 +109,11 @@ const getTempoFechamento = (req, res) => {
         JOIN 
             logs l ON l.chamado_id = c.id
         WHERE 
-            l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
+            l.acao = 'Chamado atualizado: Status mudou para Concluído'
         GROUP BY 
             s.nome_setor, c.id
+        HAVING 
+            tempo_total_resolucao_horas IS NOT NULL
         ORDER BY 
             setor, tempo_total_resolucao_horas DESC;
     `;
@@ -110,6 +121,9 @@ const getTempoFechamento = (req, res) => {
         if (err) {
             console.error('Erro ao buscar tempo de fechamento:', err);
             return res.status(500).json({ error: 'Erro ao buscar tempo de fechamento' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Nenhum dado encontrado.' });
         }
         return res.json(result);
     });
