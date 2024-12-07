@@ -15,31 +15,31 @@ const getTotalChamados = (status, res) => {
 // Função para buscar o tempo médio de resolução
 const getTempoMedioResolucao = (req, res) => {
   const query = `
-  SELECT 
-    ROUND(AVG(TIMESTAMPDIFF(SECOND, andamento.data_log, concluido.data_log)) / 60, 3) AS tempo_medio_resolucao_minutos
-  FROM 
-    logs andamento
-  JOIN 
-    logs concluido 
-    ON andamento.chamado_id = concluido.chamado_id
-  WHERE 
-    andamento.acao = 'Chamado atualizado: Status mudou para Em Andamento'
-    AND concluido.acao = 'Chamado atualizado: Status mudou para Concluido'
-    AND andamento.data_log < concluido.data_log;
+    SELECT 
+      CEIL(AVG(TIMESTAMPDIFF(SECOND, andamento.data_log, concluido.data_log)) / 86400) AS tempo_medio_resolucao_dias
+    FROM 
+      logs andamento
+    JOIN 
+      logs concluido 
+      ON andamento.chamado_id = concluido.chamado_id
+    WHERE 
+      andamento.acao = 'Chamado atualizado: Status mudou para Em Andamento'
+      AND concluido.acao = 'Chamado atualizado: Status mudou para Concluido'
+      AND andamento.data_log < concluido.data_log;
   `;
-  
+
   modelHome.executeQuery(query, [], (err, result) => {
     if (err) {
       console.error('Erro ao buscar tempo médio de resolução:', err);
       return res.status(500).json({ error: 'Erro ao buscar tempo médio de resolução' });
     }
-    if (result.length > 0) {
+    if (result.length > 0 && result[0].tempo_medio_resolucao_dias !== null) {
       res.json({
-        tempo_medio_resolucao_minutos: result[0].tempo_medio_resolucao_minutos
+        tempo_medio_resolucao_dias: result[0].tempo_medio_resolucao_dias
       });
     } else {
       res.json({
-        tempo_medio_resolucao_minutos: 0
+        tempo_medio_resolucao_dias: 0
       });
     }
   });
@@ -89,9 +89,10 @@ const getChamadosPorMes = (req, res) => {
 
 // Função para buscar evolução de chamados
 const getEvolucaoChamados = (req, res) => {
-  const query = `SELECT DATE_FORMAT(criado_em, '%Y-%m') AS mes, COUNT(*) AS total_chamados 
-                 FROM chamados 
-                 GROUP BY mes ORDER BY mes`;
+  const query = `SELECT DATE_FORMAT(criado_em, '%Y-%m-%d') AS dia, COUNT(*) AS total_chamados 
+FROM chamados 
+GROUP BY dia 
+ORDER BY dia;`;
   modelHome.executeQuery(query, [], (err, result) => {
     if (err) {
       console.error('Erro ao buscar evolução de chamados:', err);
@@ -103,9 +104,10 @@ const getEvolucaoChamados = (req, res) => {
 
 // Função para buscar chamados em degrau
 const getChamadosDegrau = (req, res) => {
-  const query = `SELECT DATE_FORMAT(criado_em, '%Y-%m') AS mes, COUNT(*) AS total_chamados 
-                 FROM chamados 
-                 GROUP BY mes ORDER BY mes`;
+  const query = `SELECT DATE_FORMAT(criado_em, '%Y-%m-%d') AS dia, COUNT(*) AS total_chamados 
+FROM chamados 
+GROUP BY dia 
+ORDER BY dia;`;
   modelHome.executeQuery(query, [], (err, result) => {
     if (err) {
       console.error('Erro ao buscar chamados em degrau:', err);

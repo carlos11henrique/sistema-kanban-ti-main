@@ -1,7 +1,7 @@
 const modelHome = require('../models/homeTMModel');
 
 // Retorna o tempo médio de resolução dos problemas por setor
-const getTempoMedioResolucao = (req, res) => {
+const getTempoMedioResolucao = async (req, res) => {
     const query = `
         SELECT 
             s.nome_setor AS setor,
@@ -20,20 +20,20 @@ const getTempoMedioResolucao = (req, res) => {
         ORDER BY 
             setor, tempo_medio_resolucao_horas;
     `;
-    modelHome.executeQuery(query, [], (err, result) => {
-        if (err) {
-            console.error('Erro ao buscar tempo médio de resolução:', err);
-            return res.status(500).json({ error: 'Erro ao buscar tempo médio de resolução' });
-        }
+    try {
+        const result = await modelHome.executeQuery(query, []);
         if (result.length === 0) {
             return res.status(404).json({ message: 'Nenhum dado encontrado.' });
         }
         return res.json(result);
-    });
+    } catch (err) {
+        console.error('Erro ao buscar tempo médio de resolução:', err);
+        return res.status(500).json({ error: 'Erro ao buscar tempo médio de resolução' });
+    }
 };
 
 // Retorna os problemas com maior número de chamados por setor
-const getProblemasMaiorIndice = (req, res) => {
+const getProblemasMaiorIndice = async (req, res) => {
     const query = `
         SELECT 
             s.nome_setor AS setor,
@@ -51,20 +51,20 @@ const getProblemasMaiorIndice = (req, res) => {
             setor, total_chamados DESC
         LIMIT 10;
     `;
-    modelHome.executeQuery(query, [], (err, result) => {
-        if (err) {
-            console.error('Erro ao buscar problemas com maior índice de chamados:', err);
-            return res.status(500).json({ error: 'Erro ao buscar problemas com maior índice de chamados' });
-        }
+    try {
+        const result = await modelHome.executeQuery(query, []);
         if (result.length === 0) {
             return res.status(404).json({ message: 'Nenhum dado encontrado.' });
         }
         return res.json(result);
-    });
+    } catch (err) {
+        console.error('Erro ao buscar problemas com maior índice de chamados:', err);
+        return res.status(500).json({ error: 'Erro ao buscar problemas com maior índice de chamados' });
+    }
 };
 
 // Retorna o tempo para o primeiro contato nos chamados por setor
-const getTempoPrimeiroContato = (req, res) => {
+const getTempoPrimeiroContato = async (req, res) => {
     const query = `
         SELECT 
             s.nome_setor AS setor,
@@ -83,20 +83,20 @@ const getTempoPrimeiroContato = (req, res) => {
         ORDER BY 
             setor, tempo_primeiro_contato_horas ASC;
     `;
-    modelHome.executeQuery(query, [], (err, result) => {
-        if (err) {
-            console.error('Erro ao buscar tempo de primeiro contato:', err);
-            return res.status(500).json({ error: 'Erro ao buscar tempo de primeiro contato' });
-        }
+    try {
+        const result = await modelHome.executeQuery(query, []);
         if (result.length === 0) {
             return res.status(404).json({ message: 'Nenhum dado encontrado.' });
         }
         return res.json(result);
-    });
+    } catch (err) {
+        console.error('Erro ao buscar tempo de primeiro contato:', err);
+        return res.status(500).json({ error: 'Erro ao buscar tempo de primeiro contato' });
+    }
 };
 
 // Retorna o tempo total para fechamento dos chamados por setor
-const getTempoFechamento = (req, res) => {
+const getTempoFechamento = async (req, res) => {
     const query = `
         SELECT 
             s.nome_setor AS setor,
@@ -117,16 +117,16 @@ const getTempoFechamento = (req, res) => {
         ORDER BY 
             setor, tempo_total_resolucao_horas DESC;
     `;
-    modelHome.executeQuery(query, [], (err, result) => {
-        if (err) {
-            console.error('Erro ao buscar tempo de fechamento:', err);
-            return res.status(500).json({ error: 'Erro ao buscar tempo de fechamento' });
-        }
+    try {
+        const result = await modelHome.executeQuery(query, []);
         if (result.length === 0) {
             return res.status(404).json({ message: 'Nenhum dado encontrado.' });
         }
         return res.json(result);
-    });
+    } catch (err) {
+        console.error('Erro ao buscar tempo de fechamento:', err);
+        return res.status(500).json({ error: 'Erro ao buscar tempo de fechamento' });
+    }
 };
 
 module.exports = {
