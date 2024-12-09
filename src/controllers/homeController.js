@@ -143,6 +143,101 @@ const getChamadosPorProblema = (problemaId, res) => {
   });
 };
 
+
+// Tempo médio por setor e problema
+const getTempoMedioResolucaoTM = (req, res) => {
+  const query = `
+      SELECT
+          s.nome_setor AS setor,
+          p.descricao AS problema,
+          ROUND(AVG(TIMESTAMPDIFF(HOUR, c.criado_em, l.data_log)), 2) AS tempo_medio_resolucao_horas
+      FROM setores s
+      JOIN chamados c ON s.id = c.setor_id
+      JOIN problemas p ON c.problema_id = p.id
+      JOIN logs l ON l.chamado_id = c.id AND l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
+      GROUP BY s.nome_setor, p.descricao
+      ORDER BY setor, tempo_medio_resolucao_horas;
+  `;
+  modelHome.executeQuery(query, [], (err, result) => {
+      if (err) {
+          console.error('Erro ao buscar tempo médio de resolução por setor e problema:', err);
+          return res.status(500).json({ error: 'Erro ao buscar tempo médio de resolução por setor e problema' });
+      }
+      res.json(result);
+  });
+};
+
+// Problemas com maior índice de chamados
+const getProblemasMaiorIndice = (req, res) => {
+    const query = `
+        SELECT
+            s.nome_setor AS setor,
+            p.descricao AS problema,
+            COUNT(c.id) AS total_chamados
+        FROM setores s
+        JOIN chamados c ON s.id = c.setor_id
+        JOIN problemas p ON c.problema_id = p.id
+        GROUP BY s.nome_setor, p.descricao
+        ORDER BY setor, total_chamados DESC
+        LIMIT 10;
+    `;
+    modelHome.executeQuery(query, [], (err, result) => {
+      if (err) {
+          console.error('Erro ao buscar o problema com maior índice de chamados:', err);
+          return res.status(500).json({ error: 'Erro ao buscar o problema com maior índice de chamados' });
+      }
+      res.json(result);
+  });
+
+};
+
+// Tempo para primeiro contato
+const getTempoPrimeiroContato = (req, res) => {
+    const query = `
+        SELECT
+            s.nome_setor AS setor,
+            c.id AS chamado_id,
+            TIMESTAMPDIFF(HOUR, c.criado_em, MIN(l.data_log)) AS tempo_primeiro_contato_horas
+        FROM setores s
+        JOIN chamados c ON s.id = c.setor_id
+        JOIN logs l ON l.chamado_id = c.id AND l.acao LIKE 'Chamado atualizado%'
+        GROUP BY s.nome_setor, c.id
+        ORDER BY setor, tempo_primeiro_contato_horas ASC;
+    `;
+    modelHome.executeQuery(query, [], (err, result) => {
+      if (err) {
+          console.error('Erro ao buscar Tempo para primeiro contato:', err);
+          return res.status(500).json({ error: 'Erro ao buscar Tempo para primeiro contato' });
+      }
+      res.json(result);
+  });
+};
+
+// Tempo total de resolução
+const getTempoFechamento = (req, res) => {
+    const query = `
+        SELECT
+            s.nome_setor AS setor,
+            c.id AS chamado_id,
+            TIMESTAMPDIFF(HOUR, c.criado_em, MAX(l.data_log)) AS tempo_total_resolucao_horas
+        FROM setores s
+        JOIN chamados c ON s.id = c.setor_id
+        JOIN logs l ON l.chamado_id = c.id
+        WHERE l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
+        GROUP BY s.nome_setor, c.id
+        ORDER BY setor, tempo_total_resolucao_horas DESC;
+    `;
+    modelHome.executeQuery(query, [], (err, result) => {
+      if (err) {
+          console.error('Erro ao buscar tempo Fechamento:', err);
+          return res.status(500).json({ error: 'Erro ao buscar tempo Fechamento' });
+      }
+      res.json(result);
+  });
+
+};
+
+
 module.exports = {
   getTotalChamados,
   getTempoMedioResolucao,
@@ -152,5 +247,10 @@ module.exports = {
   getEvolucaoChamados,
   getChamadosDegrau,
   getChamadosPorCategoria,
-  getChamadosPorProblema
+  getChamadosPorProblema,
+
+  getTempoMedioResolucaoTM,
+  getProblemasMaiorIndice,
+  getTempoPrimeiroContato,
+  getTempoFechamento,
 };

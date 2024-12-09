@@ -11,7 +11,6 @@ const atribuídosRoutes = require('./routes/atribuidosRoutes');
 const logsRoutes = require('./routes/logsRoutes');
 const authRoutes = require('./routes/authRoutes');
 const homeRoutes = require('./routes/homeRoutes'); // Corrigido o caminho
-const homeTMRoutes = require('./routes/homeTMRoutes');
 const cors = require('cors');
 const { verify, authorize, ROLES } = require('./middleware/auth');
 const usuariosModel = require('./models/usuariosModel');
@@ -36,7 +35,6 @@ app.use('/chamados-maquinas', verify, authorize([ROLES.NOA, ROLES.TI, ROLES.MANU
 app.use('/atribuidos', verify, atribuídosRoutes);
 app.use('/logs', verify, logsRoutes);
 app.use('/home', homeRoutes); 
-app.use('/homeTM', homeTMRoutes);
 
 
 // Função para criar usuário se não existir
