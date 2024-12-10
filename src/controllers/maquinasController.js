@@ -51,9 +51,7 @@ const maquinasController = {
 
   update: async (req, res) => {
     try {
-      const {id, numero_maquina, tipo_equipamento, descricao, sala_id } = req.body;
-      console.log(req.body);
-      
+      const {id, numero_maquina, tipo_equipamento, descricao, sala_id } = req.body;      
       if (!numero_maquina || !tipo_equipamento || !sala_id) {
         return res.status(400).json({ error: 'Dados insuficientes para atualizar a máquina' });
       }
