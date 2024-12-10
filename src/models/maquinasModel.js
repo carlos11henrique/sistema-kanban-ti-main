@@ -73,8 +73,6 @@ LEFT JOIN salas ON maquinas.sala_id = salas.id;
       });
     });
   },
-  
-
   delete: (id) => {
     return new Promise((resolve, reject) => {
       db.query('DELETE FROM maquinas WHERE id = ?', [id], (err) => {

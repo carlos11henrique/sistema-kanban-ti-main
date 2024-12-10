@@ -222,7 +222,6 @@ INSERT IGNORE INTO problemas (descricao) VALUES
 ('Mobiliário'),
 ('Computadores e Periféricos'),
 ('Softwares e Programas Específicos'),
-('Disposição dos Equipamentos no Ambiente'),
 ('Internet'),
 ('Outros');
 

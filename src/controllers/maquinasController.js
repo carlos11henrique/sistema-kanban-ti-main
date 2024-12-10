@@ -1,3 +1,4 @@
+// src/controllers/maquinasController.js
 const maquinasModel = require('../models/maquinasModel');
 
 const maquinasController = {
@@ -50,7 +51,8 @@ const maquinasController = {
 
   update: async (req, res) => {
     try {
-      const { numero_maquina, tipo_equipamento, descricao, sala_id } = req.body;
+      const {id, numero_maquina, tipo_equipamento, descricao, sala_id } = req.body;
+      console.log(req.body);
       
       if (!numero_maquina || !tipo_equipamento || !sala_id) {
         return res.status(400).json({ error: 'Dados insuficientes para atualizar a máquina' });
@@ -62,11 +64,12 @@ const maquinasController = {
 
       // Verificar se a máquina existe
       const maquinaExistente = await maquinasModel.getById(req.params.id);
+      
       if (!maquinaExistente) {
         return res.status(404).json({ error: 'Máquina não encontrada' });
       }
 
-      await maquinasModel.update(req.params.id, { numero_maquina, tipo_equipamento, descricao, sala_id });
+      await maquinasModel.update(req.params.id, numero_maquina, tipo_equipamento, descricao, sala_id);
       res.sendStatus(204);
     } catch (error) {
       console.error("Erro ao atualizar máquina:", error);
