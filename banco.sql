@@ -138,80 +138,99 @@ INSERT INTO blocos (nome_bloco) VALUES
 ('Bloco E'),
 ('Bloco F'),
 ('Bloco G'),
-('Bloco H');
+('Bloco H'),
+('Bloco I');
 
 -- Insere salas para Bloco A
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('Lab. de acionamento mezanino - Térreo', 1),
-('Eletrotécnica - Térreo', 1),
-('Hidráulica e pneumática - Térreo', 1),
-('Automação industrial - Térreo', 1),
-('Automação predial - Térreo', 1);
+('sala de METROLOGIA', 1),
+('SALA ELÉTRICA SALA 01', 1),
+('SALA ELÉTRICA SALA 02', 1),
+('SALA ELÉTRICA SALA 03', 1),
+('SALA ELÉTRICA SALA 04', 1),
+('HIDRÁULICA LAB', 1),
+('AUT PREDIAL LAB', 1),
+('PANIFICAÇÃO 2/3 LAB', 1);
 
 -- Insere salas para Bloco B
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('Lab. Química - Térreo', 2);
+('Química LAB', 2);
 
 -- Insere salas para Bloco C
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('Lab. Mecânica industrial - Térreo', 3),
-('Lab. de Hidráulica e Pneumática - Térreo', 3),
-('Lab. Torno - Térreo', 3);
+('LAB FABRICAÇÃO ', 3),
+('MANUTENÇÃO I LAB', 3),
+('MANUTENÇÃO II LAB', 3),
+('SOLDAGEM LAB', 3),
+('MECÂNICA I SALA', 3);
+
+
 
 -- Insere salas para Bloco D
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('Laboratório - Térreo', 4),
-('Sala 01 - Térreo', 4),
-('Lab Maker - Térreo', 4);
+('PLANTA CIM', 4),
+('LAB QUALIDADE', 4),
+('LAB MAKER', 4);
 
 -- Insere salas para Bloco E
 INSERT INTO salas (numero_sala, bloco_id) VALUES
 ('Sala 01 - Térreo', 5),
-('Sala 1.1 - Térreo', 5),
-('Sala 1.2 - Térreo', 5),
 ('Sala 02 - Térreo', 5),
 ('Sala 03 - Térreo', 5),
 ('Sala 04 - Térreo', 5),
 ('Sala 05 - Térreo', 5),
 ('Sala 06 - Térreo', 5),
-('Sala 6.1 - Térreo', 5),
 ('Sala 07 - Térreo', 5),
 ('Sala 08 - Térreo', 5),
-('Predial (S.9) - Térreo', 5),
-('Sala 10 - Térreo', 5);
+('Sala 09 - Térreo', 5),
+('Sala 10 - Térreo', 5),
+('Sala 11 - Térreo', 5),
+('Sala 12 - Térreo', 5),
+('Sala 13 - Térreo', 5),
+('Sala 14 - Térreo', 5),
+('Sala 15 - Térreo', 5),
+('Sala 16 - Térreo', 5);
 
 -- Insere salas para Bloco F
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('Laboratório 01 - 1° Andar', 6),
-('Laboratório 02 - 1° Andar', 6),
-('Laboratório 03 - 1° Andar', 6),
-('Laboratório 04 - 1° Andar', 6),
-('Laboratório 05 - 1° Andar', 6),
-('Laboratório 06 - 1° Andar', 6),
-('Laboratório 07 - 1° Andar', 6),
-('Laboratório 08 - 1° Andar', 6),
-('Laboratório 09 - 1° Andar', 6),
-('Sala 10 - 1° Andar', 6),
-('Sala 11 - 2° Andar', 6),
-('Sala 12 - 2° Andar', 6),
-('Sala 13 - 2° Andar', 6),
-('Sala 14 - 2° Andar', 6),
-('Sala 15 - 2° Andar', 6),
-('Sala 16 - 2° Andar', 6),
-('Sala 17 - 2° Andar', 6),
-('Sala 18 - 2° Andar', 6),
-('Sala 19 - 2° Andar', 6),
-('Sala 20 - 2° Andar', 6);
+('01 - LAB DE SISTEMAS', 6),
+('02 - LAB DE INFORMÁTICA', 6),
+('03 - LAB PROGRAMAÇÃO DE APP', 6),
+('04 - LAB DE INFORMÁTICA', 6),
+('05 - LAB LÓGICA DE PROGRAMAÇÃO', 6),
+('06 - LAB DE INFORMÁTICA', 6),
+('07 - LAB PROGRAMAÇÃO WEB', 6),
+('08 - LAB DE INFORMÁTICA', 6),
+('09 - LAB CAD/CAM', 6),
+('10 - LAB DE INFORMÁTICA', 6),
+('11 - LAB ELETROTÉCNICA', 6),
+('12 - SALA - 2º ANDAR', 6),
+('13 - LAB ACIONAMENTOS', 6),
+('14 - SALA - 2º ANDAR', 6),
+('15 - LAB ELETRÔNICA', 6),
+('16 - SALA - 2º ANDAR', 6),
+('17 - SALA - 2º ANDAR', 6),
+('18 - SALA - 2º ANDAR', 6);
+('19 - SALA - 2º ANDAR', 6),
+('20 - SALA - 2º ANDAR', 6),
 
 -- Insere salas para Bloco G
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('Mecânica automotiva - Térreo', 7);
+('ARMAZENAGEM', 7);
+('LAB MOTOCICLETAS', 7);
+('FUNILARIA', 7);
+
 
 -- Insere salas para Bloco H
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('Setor teórica de Empilhadeira - Térreo', 8),
-('Sala de Planta EMI - Térreo', 8),
-('Planta de processamento de cereais, raízes e derivados - Térreo', 8);
+('SALA EMPILHADEIRA', 8),
+('PANIFICAÇÃO', 8),
+('MICROBIOLOGIA', 8),
+('ARENA RD', 8);
+INSERT INTO salas (numero_sala, bloco_id) VALUES
+('PREDIAL II', 9),
+('SALA EXTERNA', 9);
+
 
 -- Insere problemas
 INSERT IGNORE INTO problemas (descricao) VALUES
