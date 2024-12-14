@@ -1,0 +1,135 @@
+# Back-end Documentação
+
+## Introdução
+
+Este é o back-end da aplicação, responsável por gerenciar os chamados e usuários.
+
+## Rotas da API
+
+### Chamados
+
+* **GET /chamados**: Retorna todos os chamados.
+* **POST /chamados**: Cria um novo chamado.
+* **GET /chamados/:id**: Retorna um chamado específico.
+* **PUT /chamados/:id**: Atualiza um chamado.
+* **DELETE /chamados/:id**: Exclui um chamado.
+
+### Usuários
+
+* **GET /usuarios**: Retorna todos os usuários.
+* **POST /usuarios**: Cria um novo usuário.
+* **GET /usuarios/:id**: Retorna um usuário específico.
+* **PUT /usuarios/:id**: Atualiza um usuário.
+* **DELETE /usuarios/:id**: Exclui um usuário.
+
+### Autenticação
+
+* **POST /autenticar**: Autentica um usuário e retorna um token JWT.
+* **GET /perfil**: Retorna o perfil do usuário autenticado.
+
+### Administração
+
+* **GET /admin/chamados**: Retorna todos os chamados para o administrador.
+* **GET /admin/usuarios**: Retorna todos os usuários para o administrador.
+* **POST /admin/chamados**: Cria um novo chamado para o administrador.
+* **POST /admin/usuarios**: Cria um novo usuário para o administrador.
+
+## Modelos de Dados
+
+### Chamados
+
+* id (int, primary key, autoincrement)
+* titulo (varchar)
+* descricao (text)
+* status (varchar)
+* data_criacao (datetime)
+* data_atualizacao (datetime)
+* data_exclusao (datetime)
+* usuario_id (int, foreign key)
+
+### Usuários
+
+* id (int, primary key, autoincrement)
+* nome_completo (varchar)
+* senha (varchar)
+* email (varchar)
+* instituicao (varchar)
+* ocupacao (varchar)
+
+### Tokens
+
+* token (varchar)
+* usuario_id (int, foreign key)
+* data_expiracao (datetime)
+
+## Autenticação e Segurança
+
+* A autenticação é feita usando tokens JWT.
+* Os tokens são gerados usando a biblioteca `jsonwebtoken`.
+* A senha do usuário é criptografada usando bcrypt.
+
+## Middlewares
+
+* **auth**: Verifica se o usuário está autenticado antes de permitir acesso às rotas protegidas.
+* **admin**: Verifica se o usuário é administrador antes de permitir acesso às rotas administrativas.
+* **blocos**: Verifica se o usuário tem permissão para acessar um determinado bloco.
+* **sala**: Verifica se o usuário tem permissão para acessar uma determinada sala.
+
+## Maquinas
+
+* **maquina1**: Maquina responsável por processar os chamados.
+* **maquina2**: Maquina responsável por processar os usuários.
+
+## Blocos
+
+* **bloco1**: Bloco responsável por gerenciar os chamados.
+* **bloco2**: Bloco responsável por gerenciar os usuários.
+
+## Salas
+
+* **sala1**: Sala responsável por gerenciar os chamados.
+* **sala2**: Sala responsável por gerenciar os usuários.
+
+## Setores
+
+* **setor1**: Setor responsável por gerenciar os chamados.
+* **setor2**: Setor responsável por gerenciar os usuários.
+
+## Home
+
+* **home**: Página inicial da aplicação.
+
+## Erros
+
+* **404**: Não encontrado
+* **401**: Não autorizado
+* **500**: Erro interno do servidor
+
+## Bibliotecas Utilizadas
+
+* `express`: Framework para criar a API
+* `mongoose`: Biblioteca para interagir com o banco de dados MongoDB
+* `jsonwebtoken`: Biblioteca para gerar tokens JWT
+* `bcrypt`: Biblioteca para criptografar senhas
+
+## Configuração
+
+* O back-end utiliza o banco de dados MongoDB.
+* As configurações do banco de dados estão definidas no arquivo `.env`.
+* O back-end é executado em um servidor local.
+
+## Testes
+
+* Os testes são realizados usando a biblioteca `jest`.
+* Os testes cobrem as rotas da API, os modelos de dados e as autenticações.
+
+## Deploy
+
+* O back-end é deployado no Heroku.
+* O deploy é feito automaticamente após cada push no repositório do GitHub.
+
+## Monitoramento
+
+* **New Relic**: O back-end é monitorado usando a ferramenta New Relic, que fornece informações em tempo real sobre o desempenho da aplicação.
+* **Logs**: Os logs da aplicação são coletados e armazenados em um sistema de log centralizado.
+* **Alertas**: São configurados alertas para notificar os desenvolvedores em caso de problemas críticos.
