@@ -210,14 +210,14 @@ INSERT INTO salas (numero_sala, bloco_id) VALUES
 ('15 - LAB ELETRÔNICA', 6),
 ('16 - SALA - 2º ANDAR', 6),
 ('17 - SALA - 2º ANDAR', 6),
-('18 - SALA - 2º ANDAR', 6);
+('18 - SALA - 2º ANDAR', 6),
 ('19 - SALA - 2º ANDAR', 6),
-('20 - SALA - 2º ANDAR', 6),
+('20 - SALA - 2º ANDAR', 6);
 
 -- Insere salas para Bloco G
 INSERT INTO salas (numero_sala, bloco_id) VALUES
-('ARMAZENAGEM', 7);
-('LAB MOTOCICLETAS', 7);
+('ARMAZENAGEM', 7),
+('LAB MOTOCICLETAS', 7),
 ('FUNILARIA', 7);
 
 
