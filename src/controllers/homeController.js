@@ -213,16 +213,24 @@ ORDER BY setor, tempo_medio_primeiro_contato_horas ASC;
 // Tempo total de resolução
 const getTempoFechamento = (req, res) => {
     const query = `
-        SELECT
-            s.nome_setor AS setor,
-            c.id AS chamado_id,
-            TIMESTAMPDIFF(HOUR, c.criado_em, MAX(l.data_log)) AS tempo_total_resolucao_horas
-        FROM setores s
-        JOIN chamados c ON s.id = c.setor_id
-        JOIN logs l ON l.chamado_id = c.id
-        WHERE l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
-        GROUP BY s.nome_setor, c.id
-        ORDER BY setor, tempo_total_resolucao_horas DESC;
+SELECT 
+    setor,
+    ROUND(AVG(tempo_total_resolucao_horas), 1) AS media_tempo_resolucao_horas
+FROM (
+    SELECT
+        s.nome_setor AS setor,
+        c.id AS chamado_id,
+        TIMESTAMPDIFF(HOUR, c.criado_em, MAX(l.data_log)) AS tempo_total_resolucao_horas
+    FROM setores s
+    JOIN chamados c ON s.id = c.setor_id
+    JOIN logs l ON l.chamado_id = c.id
+    WHERE l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
+    GROUP BY s.nome_setor, c.id
+) AS resolucoes
+GROUP BY setor
+ORDER BY media_tempo_resolucao_horas DESC
+LIMIT 0, 1000;
+
     `;
     modelHome.executeQuery(query, [], (err, result) => {
       if (err) {
