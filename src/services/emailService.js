@@ -1,11 +1,10 @@
-require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-// Configuração do transportador
+//Configuração do transportador
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
   port: process.env.SMTP_PORT || 587,
-  secure: process.env.SMTP_SECURE === 'true', 
+  secure: process.env.SMTP_SECURE === 'true',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -22,6 +21,7 @@ const transporter = nodemailer.createTransport({
  * @returns {Promise<void>} - Promessa resolvida se o envio for bem-sucedido.
  */
 const enviarEmail = async (emailDestinatario, assunto, mensagem, htmlMensagem) => {
+  console.log('Iniciando envio de e-mail...');
   try {
     if (!emailDestinatario || !assunto || !mensagem) {
       throw new Error('Dados insuficientes para envio de e-mail');
@@ -29,11 +29,11 @@ const enviarEmail = async (emailDestinatario, assunto, mensagem, htmlMensagem) =
 
     console.log(`Preparando envio de e-mail para: ${emailDestinatario}`);
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: process.env.EMAIL_FROM,
       to: emailDestinatario,
       subject: assunto,
       text: mensagem,
-      html: htmlMensagem || null, 
+      html: htmlMensagem || null,
     });
     console.log(`E-mail enviado para ${emailDestinatario} com sucesso!`);
   } catch (error) {

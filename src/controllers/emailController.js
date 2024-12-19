@@ -1,12 +1,12 @@
-const db = require('../db');
-const enviarEmail = require('.service/emailService');
-const chamadosModel = require('./chamadosModel');
-const userModel = require('./usuariosModel'); // Modelo para buscar o usuário
+const enviarEmail = require('../services/emailService');
+const chamadosModel = require('../models/chamadosModel');
+const userModel = require('../models/usuariosModel'); // Modelo para buscar o usuário
 
 // Função para criar um chamado
 const criarChamado = async (req, res) => {
   try {
-    const { usuario_id, problema_id, bloco_id, sala_id, descricao, maquina_id,  } = req.body;
+    const usuario_id = req.userId;
+    const { problema_id, bloco_id, sala_id, descricao, maquina_id, setor_id } = req.body;
 
     // Validação das entradas
     if (!usuario_id || !problema_id || !bloco_id || !sala_id || !maquina_id) {
@@ -23,19 +23,19 @@ const criarChamado = async (req, res) => {
       sala_id,
       descricao,
       maquina_id,
+      setor_id
     });
 
     const chamado = await chamadosModel.getById(chamadoId);
 
     // Busca o e-mail do usuário para envio da notificação
     const usuario = await userModel.getById(usuario_id);
-
     if (usuario && usuario.email) {
       console.log(`Enviando e-mail de notificação para: ${usuario.email}`);
       await enviarEmail(
         usuario.email,
         'Chamado Realizado',
-        `Seu chamado foi registrado com sucesso. ID do chamado: ${chamadoId}.`
+        `Seu chamado foi registrado com sucesso. ID do chamado: ${chamadoId}. Descrição do problema: ${descricao}.`
       );
     }
 
