@@ -1,6 +1,19 @@
 const enviarEmail = require('../services/emailService');
 const chamadosModel = require('../models/chamadosModel');
 const userModel = require('../models/usuariosModel'); // Modelo para buscar o usuário
+const problemasModel = require('../models/problemasModel'); // Modelo para buscar o problema
+const blocosModel = require('../models/blocosModel'); // Modelo para buscar o bloco
+const salasModel = require('../models/salasModel'); // Modelo para buscar a sala
+
+// Função utilitária para montar mensagens
+function montarMensagem(tipo, problema, bloco, sala) {
+  if (tipo === 'registro') {
+    return `Seu chamado foi registrado com sucesso. Problema: ${problema.descricao}. Bloco: ${bloco.nome_bloco}. Sala: ${sala.numero_sala}.`;
+  } else if (tipo === 'conclusao') {
+    return `O chamado foi concluído com sucesso. Problema: ${problema.descricao}. Bloco: ${bloco.nome_bloco}. Sala: ${sala.numero_sala}.`;
+  }
+  return '';
+}
 
 // Função para criar um chamado
 const criarChamado = async (req, res) => {
@@ -32,11 +45,22 @@ const criarChamado = async (req, res) => {
     const usuario = await userModel.getById(usuario_id);
     if (usuario && usuario.email) {
       console.log(`Enviando e-mail de notificação para: ${usuario.email}`);
-      await enviarEmail(
-        usuario.email,
-        'Chamado Realizado',
-        `Seu chamado foi registrado com sucesso. ID do chamado: ${chamadoId}. Descrição do problema: ${descricao}.`
-      );
+
+      // Busca o problema, bloco e sala
+      const problema = await problemasModel.getById(problema_id);
+      const bloco = await blocosModel.getById(bloco_id);
+      const sala = await salasModel.getById(sala_id);
+
+      // Verificar se os dados necessários estão presentes
+      if (!problema || !bloco || !sala) {
+        return res.status(400).json({ message: 'Dados relacionados ao chamado estão incompletos.' });
+      }
+
+      // Montando a frase corretamente
+      const mensagemRegistro = montarMensagem('registro', problema, bloco, sala);
+
+      // Envia o e-mail com as informações
+      await enviarEmail(usuario.email, 'Chamado Realizado', mensagemRegistro);
     }
 
     res.status(201).json({ message: 'Chamado criado com sucesso', chamado });
@@ -69,18 +93,29 @@ const concluirChamado = async (req, res) => {
     }
 
     // Busca o e-mail do usuário
-    const usuarios = await userModel.getById(chamado.usuario_id);
+    const usuario = await userModel.getById(chamado.usuario_id);
 
-    if (usuarios && usuarios.email) {
-      console.log(`Enviando e-mail de conclusão para: ${usuarios.email}`);
-      await enviarEmail(
-        usuarios.email,
-        'Chamado Concluído',
-        `O chamado de ID ${chamado_id} foi concluído com sucesso.`
-      );
+    if (usuario && usuario.email) {
+      console.log(`Enviando e-mail de conclusão para: ${usuario.email}`);
+
+      // Busca o problema, bloco e sala
+      const problema = await problemasModel.getById(chamado.problema_id);
+      const bloco = await blocosModel.getById(chamado.bloco_id);
+      const sala = await salasModel.getById(chamado.sala_id);
+
+      // Verificar se os dados necessários estão presentes
+      if (!problema || !bloco || !sala) {
+        return res.status(400).json({ message: 'Dados relacionados ao chamado estão incompletos.' });
+      }
+
+      // Montando a frase corretamente
+      const mensagemConclusao = montarMensagem('conclusao', problema, bloco, sala);
+
+      // Envia o e-mail com as informações
+      await enviarEmail(usuario.email, 'Chamado Concluído', mensagemConclusao);
     }
 
-    res.status(200).json({ message: 'Chamado concluído com sucesso', chamado });
+    res.status(200).json({ message: 'Chamado concluído com sucesso', chamado, nome_bloco, numero_sala });
   } catch (error) {
     console.error('Erro ao concluir chamado:', error);
     res.status(500).json({ message: 'Erro ao concluir chamado' });
