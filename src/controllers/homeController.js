@@ -147,16 +147,15 @@ const getChamadosPorProblema = (problemaId, res) => {
 // Tempo médio por setor e problema
 const getTempoMedioResolucaoTM = (req, res) => {
   const query = `
-      SELECT
-          s.nome_setor AS setor,
-          p.descricao AS problema,
-          ROUND(AVG(TIMESTAMPDIFF(HOUR, c.criado_em, l.data_log)), 2) AS tempo_medio_resolucao_horas
-      FROM setores s
-      JOIN chamados c ON s.id = c.setor_id
-      JOIN problemas p ON c.problema_id = p.id
-      JOIN logs l ON l.chamado_id = c.id AND l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
-      GROUP BY s.nome_setor, p.descricao
-      ORDER BY setor, tempo_medio_resolucao_horas;
+SELECT
+    s.nome_setor AS setor,
+    ROUND(AVG(TIMESTAMPDIFF(HOUR, c.criado_em, l.data_log)), 2) AS tempo_medio_resolucao_horas
+FROM setores s
+JOIN chamados c ON s.id = c.setor_id
+JOIN logs l ON l.chamado_id = c.id AND l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
+GROUP BY s.nome_setor
+ORDER BY setor, tempo_medio_resolucao_horas;
+
   `;
   modelHome.executeQuery(query, [], (err, result) => {
       if (err) {
@@ -170,16 +169,15 @@ const getTempoMedioResolucaoTM = (req, res) => {
 // Problemas com maior índice de chamados
 const getProblemasMaiorIndice = (req, res) => {
     const query = `
-        SELECT
-            s.nome_setor AS setor,
-            p.descricao AS problema,
-            COUNT(c.id) AS total_chamados
-        FROM setores s
-        JOIN chamados c ON s.id = c.setor_id
-        JOIN problemas p ON c.problema_id = p.id
-        GROUP BY s.nome_setor, p.descricao
-        ORDER BY setor, total_chamados DESC
-        LIMIT 10;
+       SELECT
+    p.descricao AS problema,
+    COUNT(c.id) AS total_chamados
+FROM chamados c
+JOIN problemas p ON c.problema_id = p.id
+GROUP BY p.descricao
+ORDER BY total_chamados DESC
+LIMIT 10;
+
     `;
     modelHome.executeQuery(query, [], (err, result) => {
       if (err) {
@@ -195,14 +193,13 @@ const getProblemasMaiorIndice = (req, res) => {
 const getTempoPrimeiroContato = (req, res) => {
     const query = `
         SELECT
-            s.nome_setor AS setor,
-            c.id AS chamado_id,
-            TIMESTAMPDIFF(HOUR, c.criado_em, MIN(l.data_log)) AS tempo_primeiro_contato_horas
-        FROM setores s
-        JOIN chamados c ON s.id = c.setor_id
-        JOIN logs l ON l.chamado_id = c.id AND l.acao LIKE 'Chamado atualizado%'
-        GROUP BY s.nome_setor, c.id
-        ORDER BY setor, tempo_primeiro_contato_horas ASC;
+    s.nome_setor AS setor,
+    ROUND(AVG(TIMESTAMPDIFF(HOUR, c.criado_em, l.data_log)), 2) AS tempo_medio_primeiro_contato_horas
+FROM setores s
+JOIN chamados c ON s.id = c.setor_id
+JOIN logs l ON l.chamado_id = c.id AND l.acao LIKE 'Chamado atualizado%'
+GROUP BY s.nome_setor
+ORDER BY setor, tempo_medio_primeiro_contato_horas ASC;
     `;
     modelHome.executeQuery(query, [], (err, result) => {
       if (err) {
@@ -216,16 +213,24 @@ const getTempoPrimeiroContato = (req, res) => {
 // Tempo total de resolução
 const getTempoFechamento = (req, res) => {
     const query = `
-        SELECT
-            s.nome_setor AS setor,
-            c.id AS chamado_id,
-            TIMESTAMPDIFF(HOUR, c.criado_em, MAX(l.data_log)) AS tempo_total_resolucao_horas
-        FROM setores s
-        JOIN chamados c ON s.id = c.setor_id
-        JOIN logs l ON l.chamado_id = c.id
-        WHERE l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
-        GROUP BY s.nome_setor, c.id
-        ORDER BY setor, tempo_total_resolucao_horas DESC;
+SELECT 
+    setor,
+    ROUND(AVG(tempo_total_resolucao_horas), 1) AS media_tempo_resolucao_horas
+FROM (
+    SELECT
+        s.nome_setor AS setor,
+        c.id AS chamado_id,
+        TIMESTAMPDIFF(HOUR, c.criado_em, MAX(l.data_log)) AS tempo_total_resolucao_horas
+    FROM setores s
+    JOIN chamados c ON s.id = c.setor_id
+    JOIN logs l ON l.chamado_id = c.id
+    WHERE l.acao LIKE 'Chamado atualizado: Status mudou para Concluído'
+    GROUP BY s.nome_setor, c.id
+) AS resolucoes
+GROUP BY setor
+ORDER BY media_tempo_resolucao_horas DESC
+LIMIT 0, 1000;
+
     `;
     modelHome.executeQuery(query, [], (err, result) => {
       if (err) {
