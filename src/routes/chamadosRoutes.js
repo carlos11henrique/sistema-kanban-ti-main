@@ -1,4 +1,3 @@
-// src/routes/chamadosRoutes.js
 const express = require('express');
 const chamadosController = require('../controllers/chamadosController');
 const emailController = require('../controllers/emailController');
