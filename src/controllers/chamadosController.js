@@ -1,5 +1,6 @@
 // src/controllers/chamadosController.js
 const chamadosModel = require('../models/chamadosModel');
+const enviarEmail = require('../services/emailService');
 const userModel = require('../models/usuariosModel');
 const { ROLES } = require('../middleware/auth')
 
@@ -22,7 +23,7 @@ const chamadosController = {
 
 
       }
-      
+
       const action = options[userFound.ocupacao]
 
       res.json(action(chamados))
@@ -60,7 +61,7 @@ const chamadosController = {
       await chamadosModel.updateFeedback(chamadoId, feedback);
 
       // Resposta de sucesso
-      res.sendStatus(204); 
+      res.sendStatus(204);
     } catch (error) {
       console.error('Erro ao atualizar feedback do chamado:', error);
       res.status(500).json({ error: 'Erro ao atualizar feedback do chamado.' });
@@ -75,9 +76,9 @@ const chamadosController = {
         sala_id: req.body.sala_id,
         descricao: req.body.descricao,
         setor: req.body.setor,
-        maquina_id: req.body.maquina_id,  
+        maquina_id: req.body.maquina_id,
       };
-  
+
       const id = await chamadosModel.create(chamado);
       res.status(201).json({ id });
     } catch (error) {
@@ -90,6 +91,29 @@ const chamadosController = {
   update: async (req, res) => {
     try {
       await chamadosModel.update(req.params.id, req.body);
+
+      const { status } = req.body;
+      if (status === 'Concluido') {
+        console.log('Iniciando conclusão de chamado...');
+        // Busca os dados do chamado atualizado
+        const chamado = await chamadosModel.getById(req.params.id);
+
+        if (!chamado) {
+          return res.status(404).json({ message: 'Chamado não encontrado.' });
+        }
+        // Busca o e-mail do usuário
+        const usuarios = await userModel.getById(chamado.usuario_id);
+
+        if (usuarios && usuarios.email) {
+          console.log(`Enviando e-mail de conclusão para: ${usuarios.email}`);
+          await enviarEmail(
+            usuarios.email,
+            'Chamado Concluído',
+            `O chamado de ID ${req.params.id}, com descrição: "${chamado.descricao}", foi concluído com sucesso.`
+          );
+        }
+      }
+
       res.sendStatus(204);
     } catch (error) {
       console.log(error);
